@@ -52,7 +52,7 @@ abstract class Model
         return $models;
       }
     } else {
-      harpErr(['mySQL Error' => $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
+      harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
     }
     
     return false;
@@ -74,7 +74,7 @@ abstract class Model
     if ($stmt->execute()) {
       if ($stmt->rowCount()) return new static($stmt->fetch(PDO::FETCH_OBJ));
     } else {
-      harpErr(['mySQL Error' => $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
+      harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
     }
 
     return false;
@@ -141,7 +141,7 @@ abstract class Model
       }
     }
 
-    harpErr(['mySQL Error' => $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
+    harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
     return false;
 
   }
@@ -219,7 +219,7 @@ abstract class Model
         return self::findOne($user->id, $primaryKey);
       }
     } else {
-      harpErr(['mySQL Error' => $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
+      harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
     }
     return false;
 
@@ -238,7 +238,7 @@ abstract class Model
     if ($stmt->execute()) {
       if ($stmt->rowCount()) return true;
     } else {
-      harpErr(['mySQL Error' => $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
+      harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
     }
 
     return false;
@@ -275,7 +275,7 @@ abstract class Model
     if ($stmt->execute()) {
       if ($stmt->rowCount()) return true;
     } else {
-      harpErr(['mySQL Error' => $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
+      harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
     }
     return false;
   }
@@ -332,7 +332,7 @@ abstract class Model
         return new static($stmt->fetch(PDO::FETCH_OBJ));
       }
     } else {
-      harpErr(['mySQL Error' => $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
+      harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
     }
     return false;
   }

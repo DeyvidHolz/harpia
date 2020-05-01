@@ -17,12 +17,13 @@ User::createDbTable([
   'columns' => [
     'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
     'name' => 'VARCHAR(60) NOT NULL',
-    'login' => 'VARCHAR(256) NOT NULL',
+    'login' => 'VARCHAR(200) NOT NULL',
     'email' => 'VARCHAR(256) NOT NULL',
     'password' => 'VARCHAR(256) NOT NULL',
   ],
   'foreignKeys' => [
     // 'modelColumn' => 'tableReferenced|id|onUpdate:cascade',
   ], 
-  'option.createTimestampColumns' => true
+  'option.createTimestampColumns' => true,
+  'option.uniques' => ['login']
 ]);

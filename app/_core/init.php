@@ -7,6 +7,7 @@ require_once "../app/_core/ErrorHandler.php";
 require_once "../app/_core/Route.php";
 require_once "../app/_core/View.php";
 require_once "../app/_core/Package.php";
+require_once "../app/_core/MySQL.Response.php";
 require_once "../app/_core/Model.php";
 
 require_once "../app/_core/Resource.php";

@@ -20,7 +20,7 @@ class MySQLQueryCreator
     
     if (!isset($arr['option.createTimestampColumns'])) $arr['option.createTimestampColumns'] = true;
 
-    $query = "CREATE TABLE IF NOT EXISTS {table} ({columns}) ENGINE={engine} CHARACTER SET {charset} COLLATE {collate}";
+    $query = "CREATE TABLE IF NOT EXISTS `{table}` ({columns}) ENGINE={engine} CHARACTER SET {charset} COLLATE {collate}";
 
     // Array to SQL: Columns
 
@@ -80,8 +80,19 @@ class MySQLQueryCreator
     $query = preg_replace('/\{charset\}/i', $arr['config.charset'], $query);
     $query = preg_replace('/\{collate\}/i', $arr['config.collate'], $query);
 
+    $toExecute = null;
+    if (isset($arr['option.uniques']) && count($arr['option.uniques'])) {
+      $toExecute = 'ALTER TABLE `'.$arr['name'].'` ';
+      foreach ($arr['option.uniques'] as $column) {
+        $toExecute .= sprintf("ADD UNIQUE KEY `uk_%s_%s` (`%s`),", $arr['name'], $column, $column);
+      }
+      $toExecute = substr($toExecute, 0, -1);
+    }
+
     $stmt = getConnection()->prepare($query);
     if ($stmt->execute()) {
+      // Checking queries to execute after table creation
+      if ($toExecute) executeQuery($toExecute);
       return true;
     }
 

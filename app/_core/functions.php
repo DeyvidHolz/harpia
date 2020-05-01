@@ -51,6 +51,42 @@ function getConnection($charset = 'utf8') {
   }
 }
 
+function executeQuery($query, $onlyIfChanged = false) {
+  // Set $onlyIfChanged = true to return only with anything was change on the database.
+
+  $stmt = getConnection()->prepare($query);
+  if ($stmt->execute()) {
+    $stmtInfo = [
+      'query' => $query,
+      'errorCode' => $stmt->errorInfo()[1],
+      'error' => null,
+      'fetch' => $stmt->fetchAll(),
+      'executed' => true
+    ];
+
+    if ($onlyIfChanged && $stmt->rowCount()) {
+      return new MySQLResponse($stmtInfo);
+    } else {
+      return new MySQLResponse($stmtInfo);
+    }
+    
+  }
+
+  $stmtInfo = [
+    'query' => $query,
+    'errorCode' => $stmt->errorInfo()[1],
+    'error' => (isset($stmt->errorInfo()[2]) && !empty($stmt->errorInfo()[2])) ? $stmt->errorInfo()[2] : false,
+    'fetch' => null,
+    'executed' => false
+  ];
+  
+  return new MySQLResponse($stmtInfo);
+}
+
+function executed(MySQLResponse $db) {
+  return $db->executed;
+}
+
 function createInstance(String $class, stdClass $object) {
   $class = new $class($object);
   return $class;

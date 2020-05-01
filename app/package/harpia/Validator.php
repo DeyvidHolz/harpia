@@ -4,7 +4,7 @@ class Validator
 {
 
   private static $allowedValidationTypes = [
-    'letters', 'required', 'alpha', 'username', 'email', 'digits', 'maxlength', 'minlength', 'length'
+    'letters', 'required', 'alpha', 'username', 'email', 'digits', 'maxlength', 'minlength', 'length', 'url'
   ];
 
 
@@ -19,7 +19,8 @@ class Validator
     'digits.1' => 'O campo {field} deve ter {value} dígitos',
     'minlength' => 'O campo {field} deve conter no mínimo {value} caractere(s).',
     'maxlength' => 'O campo {field} deve conter no máximo {value} caractere(s).',
-    'length' => 'O campo {field} deve ter entre {value} caractere(s).'
+    'length' => 'O campo {field} deve ter entre {value} caractere(s).',
+    'url' => 'O campo {field} deve conter uma URL válida.',
   ];
 
 
@@ -182,6 +183,12 @@ class Validator
     } else {
       return true;
     }
+  }
+
+  public static function url ($val, $field) {
+    return preg_match('/^(https:\/\/|http:\/\/)?(www\.)?([A-Za-z0-9\-]{2,}+)(\.[A-Za-z]{2,10})(\.[A-Za-z]{2,10})?$/', $val) 
+    ? true 
+    : self::getPreparedInvalidMessage(self::$invalidMessages[__FUNCTION__], $field);
   }
 
 }
