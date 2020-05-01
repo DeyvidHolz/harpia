@@ -7,5 +7,4 @@ class MainController
     view('index');
   }
 
-
 }

@@ -9,8 +9,8 @@ class ImageHandler {
 
   public static $dir = '.'.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR;
   public static $formats = ['jpg', 'jpeg', 'png', 'gif', 'tiff'];
-  public static $minSize = 25000; // 0.025MB
-  public static $maxSize = 2500000; // 2.5MB
+  public static $minSize = KB*5;
+  public static $maxSize = MB*2;
   public static $defaultFormat = 'jpg';
 
   public static function save($file, $dir = null, $generateName = true) {

@@ -33,4 +33,4 @@ const VIEW_SERVICE_UNAVAILABLE = '503';
 // Define maintenance
 const IN_MAINTENANCE = false;
 // use for example: '/panel' to specify path or * to global
-const URL_MAINTENANCE = '*'; 
+const URL_MAINTENANCE = '/painel'; 

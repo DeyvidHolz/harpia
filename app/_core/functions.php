@@ -93,6 +93,7 @@ function harpErr($err, $line, $file) {
       . '</div>
     </div>
   ', $file, $line, $err);
+  exit;
 }
 
 function parseJSON($var, $echo = true) {

@@ -39,50 +39,54 @@ define('PUBLIC_PATH', $publicPath);
 
 // Defining PATH
 $path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+$params = [];
+$routeNotValid = false;
 
 // @Session: searching params
-$foundRoute = null;
-$params = [];
-$tempRoutes = [];
 
-if (count($routes)) {
-  foreach($routes as $route) {
-    $tempRoutes[] = ['arrPath' => explode('/', $route->path), 'method' => $route->method, 'realPath' => $route->path];
+$route = null;
+$paramPath = explode('/', $path);
+unset($paramPath[0]);
+$paramPath = array_values($paramPath);
+
+foreach($routes as $index => $r) {
+
+  if ($route) {
+    break;
   }
-}
 
-$tempPath = explode('/', $path);
-foreach($tempRoutes as $index => $route) {
-  // Getting paths
-  foreach($route['arrPath'] as $ind => $r) {
-    if (count($tempPath) === count($route['arrPath'])) {
-      if (preg_match('/^:/', $r)) {
-        if (isset($tempPath[$ind]) && !empty($tempPath[$ind])) {
-          $foundRoute = [
-            'path' => $route['realPath'],
-            'method' => $route['method'],
-          ];
+  $routeNotValid = false;
 
-          $params[$r] = $tempPath[$ind];
-        }
+  if (count($r['truePathSplit']) === count($paramPath)) {
+    // Split count is equal, checking route $r has any params
+
+    foreach ($r['truePathSplit'] as $i => $rpath) {
+      $match = preg_match('/^\{(.+)\}$/i', $rpath);
+
+      if ($match) {
+        // It's a parameter
+        $p = preg_replace('/([^A-Za-z0-9])/', '', $rpath);
+        $params[$p] = $paramPath[$i];
       } else {
-        if ($tempPath[$ind] !== $r) {
-          $foundRoute = null;
-          $params = null;
+        if ($paramPath[$i] !== $rpath) {
+          $routeNotValid = true;
           break;
         }
       }
     }
+
+    if (!$routeNotValid && count($params)) {
+      $route = $r;
+      break;
+    }
   }
 }
-// /Session: searching params
+
+if (!$route && isset($routes[$path])) $route = $routes[$path];
 
 // Getting route
-$route = null;
-if ($foundRoute) {
-  $route = Route::getRoute($foundRoute['path'], $foundRoute['method']);
-} else {
-  $route = Route::getRoute($path, $_SERVER['REQUEST_METHOD']);
+if ($route) {
+  $route = Route::getRoute($route, $params);
 }
 
 define('DIR_PUBLIC', PUBLIC_PATH.'/');
