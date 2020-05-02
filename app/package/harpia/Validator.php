@@ -191,4 +191,8 @@ class Validator
     : self::getPreparedInvalidMessage(self::$invalidMessages[__FUNCTION__], $field);
   }
 
+  public static function first(Array $arr, $index) {
+    return (isset($arr[$index]) && isset($arr[$index][0])) ? $arr[$index][0] : false;
+  }
+
 }

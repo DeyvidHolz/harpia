@@ -111,7 +111,7 @@ abstract class Model
     }
 
     foreach ($binds as $value => $vArr) {
-      $query .= sprintf("`%s`.`%s` = ? AND ", $table, $vArr[0]);
+      $query .= sprintf("`%s`.`%s` %s ? AND ", $table, $vArr[0], $vArr[1]);
     }
 
     $query = substr($query, 0, -4);
@@ -138,6 +138,8 @@ abstract class Model
         }
 
         return $models;
+      } else {
+        return false;
       }
     }
 
@@ -153,17 +155,17 @@ abstract class Model
   }
 
 
-  public static function save($user, $primaryKey = 'id')
+  public static function save($modelClass, $primaryKey = 'id')
   {
     
     $table = static::$table;
 
     $fillable = [];
-    foreach($user as $prop => $val) {
+    foreach($modelClass as $prop => $val) {
       $fillable[] = $prop;
     }
 
-    if (empty($user->id)) {
+    if (empty($modelClass->id)) {
       $index = array_search($primaryKey, $fillable);
       unset($fillable[$index]);
     }
@@ -175,11 +177,11 @@ abstract class Model
     // Creating Query
     $query = '';
     $toBind = [];
-    if (empty($user->id)) {
+    if (empty($modelClass->id)) {
       $query = sprintf("INSERT INTO `%s` ($fillable) VALUES ({{values}})", $table);
 
       $values = '';
-      foreach($user as $prop => $val) {
+      foreach($modelClass as $prop => $val) {
         $values .= ":$prop,";
         $toBind[] = $prop;
       }
@@ -197,7 +199,7 @@ abstract class Model
       $query = sprintf("UPDATE `%s` SET {{values}} WHERE id = :id", $table);
 
       $values = '';
-      foreach($user as $prop => $val) {
+      foreach($modelClass as $prop => $val) {
         if ($prop !== $primaryKey) $values .= "`$prop` = :$prop,";
         $toBind[] = $prop;
       }
@@ -209,14 +211,14 @@ abstract class Model
     $stmt = getConnection()->prepare($query);
 
     foreach($toBind as $bind) {
-      $stmt->bindValue(":$bind", $user->$bind);
+      $stmt->bindValue(":$bind", $modelClass->$bind);
     }
 
     if ($stmt->execute()) {
       if ($stmt->rowCount()) {
-        return empty($user->id) ? self::getLastRecord($primaryKey) : self::findOne($user->id, $primaryKey);
+        return empty($modelClass->id) ? self::getLastRecord($primaryKey) : self::findOne($modelClass->id, $primaryKey);
       } else {
-        return self::findOne($user->id, $primaryKey);
+        return self::findOne($modelClass->id, $primaryKey);
       }
     } else {
       harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
@@ -376,6 +378,16 @@ abstract class Model
     }
 
     return $object;
+  }
+
+  public static function getAsArray($arr) {
+    $users = [];
+
+    foreach ($arr as $index => $user) {
+      $users[] = (array) $user;
+    }
+
+    return $users;
   }
 
 }

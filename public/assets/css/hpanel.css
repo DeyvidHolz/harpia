@@ -1,0 +1,174 @@
+:root {
+  --hp-primary: #1D6BEC;
+  --hp-secondary: #dfdfdf;
+  --hp-success: #24D548;
+  --hp-danger: #E6152C;
+  --hp-warning: #FFB138;
+  --hp-info: #30D696;
+  --hp-dark: #303030;
+  --hp-light: #fafafa;
+  --hp-power:  #8B34C3;
+}
+
+body {
+  background-color: var(--hp-secondary) !important;
+}
+
+.powered-by-harpia {
+  position: fixed;
+  bottom: .75rem;
+  right: .75rem;
+  font-size: .7rem;
+  opacity: .8;
+  user-select: none;
+  cursor: pointer;
+  z-index: 11000;
+}
+
+.hp-tooltips {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.hp-tooltip-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 220px;
+  width: 220px;
+  border-radius: 3.5px;
+  padding: 12px 16px;
+  margin: 12px 16px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.37);
+  transition: .28s;
+}
+
+.hp-tooltip-icon {
+  font-size: 7rem;
+  transition: .28s;
+}
+
+.hp-tooltip-card h1, .hp-tooltip-card h2, .hp-tooltip-card h3, .hp-tooltip-card h4,
+.hp-tooltip-card h5, .hp-tooltip-card h6 {
+  text-align: center;
+  transition: .28s;
+}
+
+.hp-tooltip-card:hover h1, .hp-tooltip-card:hover h2, .hp-tooltip-card:hover h3,
+.hp-tooltip-card:hover h4, .hp-tooltip-card:hover h5, .hp-tooltip-card:hover h6 {
+  color: var(--hp-primary);
+}
+
+.hp-tooltip-card:hover {
+  color: #fff;
+  box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.67);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon {
+  color: var(--hp-primary);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-primary {
+  color: var(--hp-primary);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-secondary {
+  color: var(--hp-secondary);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-success {
+  color: var(--hp-success);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-danger {
+  color: var(--hp-danger);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-warning {
+  color: var(--hp-warning);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-info {
+  color: var(--hp-info);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-dark {
+  color: var(--hp-dark);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-light {
+  color: var(--hp-light);
+}
+
+.hp-tooltip-card:hover .hp-tooltip-icon-hover-power {
+  color: var(--hp-power);
+}
+
+
+.hp-container {
+  width: 80vw;
+  margin: 0 auto;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  padding: 1rem 2rem;
+}
+
+.hp-container.defined {
+  width: 640px;
+}
+
+.hp-container.defined-lg {
+  max-width: 1000px;
+}
+
+.hp-container.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hp-container-contain {
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  padding: 1rem 2rem;
+}
+
+.swift-box-shadow {
+  box-shadow: 3px 3px 6px 1px rgba(0, 0, 0, .20);
+}
+
+.hp-edit-input {
+  border-radius: 20px;
+  margin-bottom: .5rem;
+  display: block;
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: .3rem .7rem;
+}
+
+.hp-edit-input:focus {
+  outline: none;
+  box-shadow: 0px 0px 1px 1px var(--hp-primary);
+}
+
+.card-user {
+  width: 345px !important;
+}
+
+.adapt {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+@media (max-width: 766px) {
+  .hp-container {
+    width: 92vw;
+  }
+}

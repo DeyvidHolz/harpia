@@ -1,0 +1,43 @@
+@keyframes xnavMobileInRight {
+  from { left: 100%; right: -100%; }
+  to { left: 0%; right: 0; }
+}
+
+@keyframes xnavMobileOutRight {
+  from { left: 0%; right: 0; }
+  to { left: 100%; right: -100%; }
+}
+
+@keyframes xnavMobileInLeft {
+  from { right: 100%; left: -100%; }
+  to { right: 0%; left: 0; }
+}
+
+@keyframes xnavMobileOutLeft {
+  from { right: 0%; left: 0; }
+  to { right: 100%; left: -100%; }
+}
+
+.autonavMobileInRight {
+  animation-name: xnavMobileInRight;
+  animation-duration: .52s;
+  animation-fill-mode: forwards;
+}
+.autonavMobileOutRight {
+  animation-name: xnavMobileOutRight;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+.autonavMobileInLeft {
+  animation-name: xnavMobileInLeft;
+  animation-duration: .52s;
+  animation-fill-mode: forwards;
+}
+.autonavMobileOutLeft {
+  animation-name: xnavMobileOutLeft;
+  animation-duration: .5s;
+  animation-fill-mode: forwards;
+}
+
+.autonavActive { color: #db1230 !important; }

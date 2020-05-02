@@ -1,0 +1,64 @@
+/* Buttons */
+
+.sbtn {
+    min-width: 64px;
+    padding: 9px 16px;
+    border: none;
+    background-color: #ebebeb;
+    border-radius: 3px;
+    box-shadow: 5px 5px 19px -12px rgba(0,0,0,0.75);
+    cursor: pointer;
+    margin: 7.5px;
+}
+
+.sbtn:hover {
+    background-color: #dbdbdb;
+    transition: all .1s ease-in;
+}
+
+.sbtn:active {
+    background-color: #f0f0f0;
+}
+
+.sbtn-round {
+    border-radius: 32px;
+}
+
+.sbtn:focus {
+    outline: 0;
+}
+
+.sbtn-square {
+    border-radius: 0 !important;
+}
+
+.sbtn-primary {
+    background-color: #3282b8;
+    color: #f0f0f0;
+}
+
+.sbtn-primary:hover {
+    background-color: #2c6e99;
+    transition: all .1s ease-in;
+}
+
+.sbtn-primary:active {
+    background-color: #5298c7;
+}
+
+/* Helpers */
+.w-100 {
+    width: 100%;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}

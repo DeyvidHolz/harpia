@@ -22,6 +22,9 @@ const DB_COLLATE = 'utf8_general_ci';
 const directory_storage = 'storage';
 const directory_assets = 'assets';
 
+// Auto start session (session_start)
+const SESSION_AUTO_START = true;
+
 // Try to create model database tables
 const DB_FUNC_CREATE_TABLES = true;
 const CONF_DEFAULT_TIMEZONE = 'America/Sao_Paulo';

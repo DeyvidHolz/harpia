@@ -1,17 +1,28 @@
 <?php
 
 function view($path, $data = null) {
+  @session_start();
+  if (isset($_SESSION['HARPIA_REDIRECT_DATA'])) {
+    $data['@redirect_data'] = $_SESSION['HARPIA_REDIRECT_DATA'];
+    unset ($_SESSION['HARPIA_REDIRECT_DATA']);
+  }
   $view = new View($path, $data);
   return $view->get();
 }
 
-function get($index, $displayNulls = !PRODUCTION) {
+function get($index = null, $displayNulls = !PRODUCTION, $returnUndefinedToFalse = false) {
   global $__VIEW_DATA;
+
+  if (!$index) return empty($__VIEW_DATA) ? $returnUndefinedToFalse ? false : 'undefined' : $__VIEW_DATA;
+
+  if ($displayNulls === '@') $displayNulls = !PRODUCTION;
 
   if (isset($__VIEW_DATA[$index])) {
     return $__VIEW_DATA[$index];
+  } else if (isset($_SESSION[$index])) {
+    return $_SESSION[$index];
   } else {
-    return $displayNulls ? '[null]' : '';
+    return $displayNulls ? $returnUndefinedToFalse ? false : 'undefined' : '';
   }
 }
 
@@ -154,4 +165,26 @@ function asset($path) {
 
 function assets($path) {
   return DIR_ASSETS.$path;
+}
+
+function storage($path) {
+  return DIR_PUBLIC.'storage/'.$path;
+}
+
+function redirect($route, $data = null) {
+  if ($route{0} === '@') $route = preg_replace('/^@\/?/', PUBLIC_PATH, $route);
+  if ($data) {
+    @session_start();
+    $_SESSION['HARPIA_REDIRECT_DATA'] = $data;
+  }
+  header("Location: $route");
+  exit;
+}
+
+function debug($var) {
+  echo '<pre>';
+  echo '<span style="color: #2770e6"><strong>Debugging:</strong></span><br><br>';
+  print_r($var);
+  echo '<hr>';
+  echo '</pre>';
 }

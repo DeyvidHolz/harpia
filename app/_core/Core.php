@@ -56,6 +56,14 @@ class Core
         }
       }
 
+      $request->file = new stdClass();
+      if (!empty($_FILES)) {
+        foreach($_FILES as $index => $value) {
+          $tempFileIndex = preg_replace('/[^a-zA-Z0-9]/', '', $index);
+          $request->file->$tempFileIndex = $value;
+        }
+      }
+
     }
 
     return $returnArray ? [$request] : $request;

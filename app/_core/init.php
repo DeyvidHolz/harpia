@@ -10,12 +10,18 @@ require_once "../app/_core/Package.php";
 require_once "../app/_core/MySQL.Response.php";
 require_once "../app/_core/Model.php";
 
+require_once "../app/_core/_packages/ImageHandler.php";
+require_once "../app/_core/_packages/FileHandler.php";
+
 require_once "../app/_core/Resource.php";
 require_once "../app/_core/Layout.php";
+require_once "../app/_core/Component.php";
 
 require_once "../app/config.php";
 require_once "../app/routes.php";
 require_once "../app/global.packages.php";
+
+if (SESSION_AUTO_START) session_start();
 
 date_default_timezone_set(CONF_DEFAULT_TIMEZONE);
 
@@ -46,44 +52,46 @@ $routeNotValid = false;
 // @Session: searching params
 
 $route = null;
+if (isset($routes[$path])) $route = $routes[$path];
+
 $paramPath = explode('/', $path);
 unset($paramPath[0]);
 $paramPath = array_values($paramPath);
 
-foreach($routes as $index => $r) {
+if (!$route) {
+  foreach($routes as $index => $r) {
 
-  if ($route) {
-    break;
-  }
-
-  $routeNotValid = false;
-
-  if (count($r['truePathSplit']) === count($paramPath)) {
-    // Split count is equal, checking route $r has any params
-
-    foreach ($r['truePathSplit'] as $i => $rpath) {
-      $match = preg_match('/^\{(.+)\}$/i', $rpath);
-
-      if ($match) {
-        // It's a parameter
-        $p = preg_replace('/([^A-Za-z0-9])/', '', $rpath);
-        $params[$p] = $paramPath[$i];
-      } else {
-        if ($paramPath[$i] !== $rpath) {
-          $routeNotValid = true;
-          break;
-        }
-      }
+    if ($route) {
+      break;
     }
 
-    if (!$routeNotValid && count($params)) {
-      $route = $r;
-      break;
+    $routeNotValid = false;
+
+    if (count($r['truePathSplit']) === count($paramPath)) {
+      // Split count is equal, checking route $r has any params
+
+      foreach ($r['truePathSplit'] as $i => $rpath) {
+        $match = preg_match('/^\{(.+)\}$/i', $rpath);
+
+        if ($match) {
+          // It's a parameter
+          $p = preg_replace('/([^A-Za-z0-9])/', '', $rpath);
+          $params[$p] = $paramPath[$i];
+        } else {
+          if ($paramPath[$i] !== $rpath) {
+            $routeNotValid = true;
+            break;
+          }
+        }
+      }
+
+      if (!$routeNotValid && count($params)) {
+        $route = $r;
+        break;
+      }
     }
   }
 }
-
-if (!$route && isset($routes[$path])) $route = $routes[$path];
 
 // Getting route
 if ($route) {
@@ -92,7 +100,7 @@ if ($route) {
 
 define('DIR_PUBLIC', PUBLIC_PATH.'/');
 define('DIR_ASSETS', PUBLIC_PATH.directory_assets.'/');
-define('DIR_STORAGE', PUBLIC_PATH.directory_storage.'/');
+define('DIR_STORAGE', PUBLIC_PATH.directory_storage);
 
 if ($route) {
   define('PATH', $path);

@@ -1,3 +1,3 @@
 <?php
 
-// Package::use('harpia/Validator');
+Package::use('AppInfo');

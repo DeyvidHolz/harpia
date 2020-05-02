@@ -1,0 +1,110 @@
+:root {
+  --hc-primary: #1D6BEC;
+  --hc-secondary: #C3C3C3;
+  --hc-success: #24D548;
+  --hc-danger: #E6152C;
+  --hc-warning: #FFB138;
+  --hc-info: #30D696;
+  --hc-dark: #303030;
+  --hc-light: #fafafa;
+  --hc-power:  #8B34C3;
+}
+
+/* KeyFrames */
+@keyframes kfNotificationIn {
+  from {
+    right: -50vw;
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  to {
+    right: 0;
+  }
+}
+
+@keyframes kfNotificationOut {
+  from {
+    right: 0vw;
+    opacity: 1;
+  }
+
+  90% {
+    opacity: .3;
+  }
+
+  to {
+    right: -50vw;
+  }
+}
+
+.hc--notification-animateIn {
+  animation-name: kfNotificationIn;
+  animation-duration: .46s;
+  animation-fill-mode: forwards;
+}
+
+.hc--notification-animateOut {
+  animation-name: kfNotificationOut;
+  animation-duration: .74s;
+  animation-fill-mode: forwards;
+}
+
+.hc--swiftBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, .55);
+  z-index: 3000;
+}
+
+.hc--notification {
+  box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, .45);
+  min-height: 80px;
+  max-height: 140px;
+  width: 410px;
+  background-color: #ccc;
+  color: var(--hc-dark);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  cursor: pointer;
+  padding: .55rem 1.1rem;
+  user-select: none;
+  border-radius: 4.5px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  position: fixed;
+  right: 0;
+  bottom: 2.35rem;
+  transition: .28s;
+  font-size: .9rem;
+  letter-spacing: .1px;
+  z-index: 3005;
+}
+
+.hc--notification:hover {
+  box-shadow: 2px 2px 9px 1px rgba(0, 0, 0, .55);
+}
+
+.hc--notification:hover::before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background-color: rgba(0, 0, 0, .07);
+  border-radius: 4.5px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.hc--notification {
+  font-size: 1.6rem;
+  margin-right: .5rem;
+}

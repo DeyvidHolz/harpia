@@ -18,12 +18,29 @@ User::createDbTable([
     'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
     'name' => 'VARCHAR(60) NOT NULL',
     'login' => 'VARCHAR(200) NOT NULL',
-    'email' => 'VARCHAR(256) NOT NULL',
+    'email' => 'VARCHAR(256)',
     'password' => 'VARCHAR(256) NOT NULL',
   ],
   'foreignKeys' => [
     // 'modelColumn' => 'tableReferenced|id|onUpdate:cascade',
   ], 
   'option.createTimestampColumns' => true,
-  'option.uniques' => ['login']
+]);
+
+Post::createDbTable([
+  'name' => Post::$table,
+  'columns' => [
+    'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+    'user_id' => 'INT',
+    'title' => 'VARCHAR(256) NOT NULL',
+    'subtitle' => 'VARCHAR(256) NOT NULL',
+    'categories' => 'MEDIUMTEXT',
+    'content' => 'MEDIUMTEXT NOT NULL',
+    'images' => 'MEDIUMTEXT',
+    'slug' => 'VARCHAR(256) NOT NULL',
+  ],
+  'foreignKeys' => [
+    // 'modelColumn' => 'tableReferenced|id|onUpdate:cascade',
+    'user_id' => User::$table . '|id|onChange:cascade',
+  ],
 ]);

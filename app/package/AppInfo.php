@@ -1,0 +1,6 @@
+<?php
+
+const APP_URL_SOCIAL_FACEBOOK = '#';
+const APP_URL_SOCIAL_INSTAGRAM = '#';
+const APP_URL_SOCIAL_TWITTER = '#';
+const APP_URL_SOCIAL_LINKEDIN = '#';
