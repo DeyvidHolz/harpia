@@ -15,26 +15,39 @@ class PanelController
 {
 
   public function index() {
-    view('panel/index');
+    view('panel/index', ['page_title' => 'Início - Painel - {app_name}']);
   }
 
   public function info() {
     $data = ['appContent' => AppContent::getReferenced(true)];
+    $data['page_title'] = 'Informações Gerais - Painel - {app_name}';
     view('panel/info', $data);
   }
 
   public function infoSeo() {
     $data = ['appContent' => AppContent::getReferenced(true)];
+    $data['page_title'] = 'Informações Gerais - SEO - Painel - {app_name}';
     view('panel/info_seo', $data);
   }
 
   public function configSite() {
     $data = ['appContent' => AppContent::getReferenced(true)];
+
+    $data['page_title'] = 'Configurações - Painel - {app_name}';
     view('panel/config_site', $data);
   }
 
   public function saveAppContent($request) {
     $appContent = AppContent::whereOne(['ref', '=', $request->body->ref]);
+
+    if (isset($request->file->imageFile)) {
+      $img = ImageHandler::save($request->file->imageFile);
+      $request->body->content = $img['fileName'];
+      $appContent->content = $request->body->content;
+      AppContent::save($appContent);
+      return redirect('@/painel/config/site');
+    }
+    
     $appContent->content = $request->body->content;
     response(AppContent::save($appContent));
   }
@@ -42,13 +55,14 @@ class PanelController
   public function viewAll() {
     $users = User::getAll();
     $data = [
-      'users' => $users
+      'users' => $users,
+      'page_title' => 'Usuários - Painel - {app_name}'
     ];
     view('panel/user_list', $data);
   }
 
   public function newUser() {
-    view('panel/form_user_new');
+    view('panel/form_user_new', ['page_title' => 'Novo usuário - Painel - {app_name}']);
   }
 
   public function newUserAction($request) {
@@ -96,6 +110,7 @@ class PanelController
       $data['name'] = $user->name;
       $data['login'] = $user->login;
       $data['email'] = $user->email;
+      $data['page_title'] = 'Editar usuário: ' . $user->name . ' - Painel - {app_name}';
       return view('panel/form_user_edit', $data);
     }
     
@@ -172,7 +187,7 @@ class PanelController
   }
 
   public function newPost() {
-    view('panel/form_post_new');
+    view('panel/form_post_new', ['page_title' => 'Nova postagem - Painel - {app_name}']);
   }
 
   public function editPost($request) {
@@ -183,10 +198,11 @@ class PanelController
       $data['id'] = $post->id;
       $data['title'] = $post->title;
       $data['subtitle'] = $post->subtitle;
-      $data['categories'] = join(', ', json_decode($post->categories));
+      $data['categories'] = !empty($post->categories) && is_array($post->categories) ? join(', ', json_decode($post->categories)) : '';
       $data['content'] = $post->content;
       $data['images'] = @json_decode($post->images)[0];
       $data['slug'] = $post->slug;
+      $data['page_title'] = 'Editar postagem: ' . $post->title . ' - Painel - {app_name}';
       return view('panel/form_post_edit', $data);
     }
     
@@ -196,7 +212,8 @@ class PanelController
   public function viewAllPosts() {
     $posts = Post::getAll();
     $data = [
-      'posts' => $posts
+      'posts' => $posts,
+      'page_title' => 'Lista de postagens - Painel - {app_name}'
     ];
 
     view('panel/post_list', $data);
@@ -251,7 +268,6 @@ class PanelController
   }
 
   public function editPostAction($request) {
-    debug($request);
     Package::use('harpia/Validator');
 
     $post = new Post($request->body);
@@ -270,9 +286,6 @@ class PanelController
 
       $currentPost = Post::findOne($request->body->id);
 
-      debug($currentPost);
-      debug($request);
-
       if ($currentPost) $post->id = $currentPost->id;
 
       // Saving image
@@ -283,6 +296,10 @@ class PanelController
       } else {
         $currentImage = @json_decode($currentPost->images)[0];
         $post->images = $currentImage;
+
+        if (isset($request->body->removeImage) && !empty($request->body->removeImage)) {
+          $post->images = [];
+        }
       }
 
       $post = Post::getFormatted($post);

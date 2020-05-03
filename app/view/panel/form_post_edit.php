@@ -5,6 +5,8 @@
 
 <form method="post" action="<?= PUBLIC_PATH ?>painel/post/edit" enctype="multipart/form-data" class="md-form">
   <input type="hidden" name="id" value="<?= get('id') ?>">
+  <input type="hidden" id="removeImage" name="removeImage" value="">
+
   <div class="hp-container swift-box-shadow defined-lg">
     <h2 class="text-center">Criar nova postagem</h2>
 
@@ -76,6 +78,13 @@
         </div>
       </div>
 
+      <div class="col-12 text-right">
+        <button type="button" class="btn btn-danger btn-sm" onclick="toggleRemoveImage()">
+          <span id="removeImageIcon" class="mdi mdi-checkbox-blank-outline mr-2"></span>
+          Remover imagem
+        </button>
+      </div>
+
       <div class="col-12 text-center">
         <button class="btn btn-primary mt-5">
           <span class="mdi mdi-account-plus"></span> Salvar alterações
@@ -128,15 +137,6 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 
 function getSlug(val) {
-
-  // $title = preg_replace('/\s+/', '-', $title);
-  // $title = preg_replace('/ç|Ç/', 'c', $title);
-  // $title = preg_replace('/Á|á|À|à|â|Â|ã|Ã|ä|Ä/', 'a', $title);
-  // $title = preg_replace('/É|é|È|è|ê|Ê|ë|Ë/', 'e', $title);
-  // $title = preg_replace('/Í|í|Ì|ì|î|Î|ï|Ï/', 'i', $title);
-  // $title = preg_replace('/Ó|ó|Ò|ò|ô|Ô|ö|Ö|õ|Õ/', 'o', $title);
-  // $title = preg_replace('/Ú|ú|Ù|ù|û|Û|ü|Ü/', 'u', $title);
-  // $title = preg_replace('/\-\-+/', '-', $title);
   val = val.replace(/\s+/g, '-');
   val = val.replace(/ç|Ç/g, '-');
   val = val.replace(/Á|á|À|à|â|Â|ã|Ã|ä|Ä/g, '-');
@@ -150,6 +150,20 @@ function getSlug(val) {
   val = val.replace(/^\-/, '');
   val = val.toLowerCase()
   return val;
+}
+
+let removeImageIcon = document.querySelector('#removeImageIcon');
+function toggleRemoveImage() {
+  let inputRemoveImage = document.querySelector('#removeImage');
+  if (inputRemoveImage.value.length) {
+    removeImageIcon.classList.remove('mdi-checkbox-marked');
+    removeImageIcon.classList.add('mdi-checkbox-blank-outline');
+    inputRemoveImage.value = '';
+  } else {
+    inputRemoveImage.value = '1';
+    removeImageIcon.classList.remove('mdi-checkbox-blank-outline');
+    removeImageIcon.classList.add('mdi-checkbox-marked');
+  }
 }
 </script>
 

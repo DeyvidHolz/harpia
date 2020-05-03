@@ -349,7 +349,7 @@ abstract class Model
   {
     if (!empty($object)) {
       foreach($object as $prop => $val) {
-        $this->__set($prop, $val);
+        if (property_exists($this, $prop)) $this->__set($prop, $val);
       }
     }
   }

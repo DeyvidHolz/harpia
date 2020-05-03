@@ -168,7 +168,7 @@ if ($route) {
   
 } else {
   http_response_code(404);
-  view(VIEW_NOT_FOUND);
+  view(VIEW_NOT_FOUND, ['text' => APP_CONTENT_PAGE_404_TEXT]);
 }
 
 exit;

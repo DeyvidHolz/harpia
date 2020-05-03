@@ -25,6 +25,7 @@ function setRoute(Route $route) {
     'params' => $matches,
     'paramCount' => $paramCount,
     'controller' => $route->controller,
+    'method' => $route->method,
   ];
 
 }

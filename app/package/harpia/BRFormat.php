@@ -3,7 +3,7 @@
 class BRFormat
 {
 
-  public static function CPF ($val, $format = true) {
+  public static function CPF ($val) {
     $regex = '/^(\d{3})(\d{3})(\d{3})(\d{2})$/';
     $reverseRegex = '/^(\d{3})\.(\d{3})\.(\d{3})(\-\d{2})$/';
 
@@ -16,7 +16,22 @@ class BRFormat
     return $val;
   }
 
-  public static function CNPJ ($val, $format = true) {
+  public static function RG ($val) {
+    // 28.600.065-9
+    // 228552631
+    $regex = '/^(\d{2})(\d{3})(\d{3})(\d{1})$/';
+    $reverseRegex = '/^(\d{2})\.(\d{3})\.(\d{3})\-(\d{1})$/';
+
+    if (preg_match($regex, $val)) {
+      return preg_replace($regex, '$1.$2.$3-$4', $val);
+    }
+    
+    else if (preg_match($reverseRegex, $val)) return preg_replace('/[^0-9]/', '', $val);
+
+    return $val;
+  }
+
+  public static function CNPJ ($val) {
     $regex = '/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/';
     $reverseRegex = '/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})\-(\d{2})$/';
 

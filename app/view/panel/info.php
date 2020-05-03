@@ -106,6 +106,9 @@
     setContent("social_instagram", data.social_instagram)
     setContent("social_linkedin", data.social_linkedin)
     setContent("social_youtube", data.social_youtube)
+
+    $('#phone').mask('(00) 0000-0000');
+    $('#whatsapp').mask('(00) 00000-0000');
   });
 
   function setContent(id, val) {

@@ -8,7 +8,8 @@
   <hr>
 </div>
 
-<div class="hp-container swift-box-shadow defined-lg mb-5">
+
+<div class="hp-container swift-box-shadow defined-lg mb-4">
   <div class="row">
 
     <div class="col-12">
@@ -29,7 +30,7 @@
       </div>
     </div>
 
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-12">
       <div class="md-form form-sm mt-5">
         <input type="text" id="meta_keywords" class="form-control">
         <label for="meta_keywords">Meta Keywords</label>
@@ -37,6 +38,10 @@
     </div>
 
   </div> <!-- /row -->
+</div>
+
+<div class="container">
+  <div class="hp-alert">Observação: alterar essas informações irá afetar o SEO do site.</div>
 </div>
 
 <script>

@@ -10,6 +10,8 @@
 let url = window.location.pathname;
 let route = url.substring(url.lastIndexOf('/')+1);
 
+const assetURL = '/harpia/public/assets/img/';
+
 const options = {
     main: {
         title: 'Harpia',
@@ -73,7 +75,7 @@ const options = {
         showMenuHamburgerSize: 768,
         menuHamburger: {
             element: 'img',
-            src: './assets/img/menu.png',
+            src: assetURL + 'menu.png',
             class: null,
             style: 'width: 30;',
             backgroundColor: '#F2F2F230',
@@ -85,7 +87,7 @@ const options = {
         },
         mobileMenu: {
             closeElement: 'img',
-            closeSrc: './assets/img/close.png',
+            closeSrc: assetURL + 'close.png',
             closeElementClass: null,
             closeElementStyle: 'width: 30;',
             animationInClass: 'autonavMobileInRight',

@@ -108,3 +108,70 @@
   font-size: 1.6rem;
   margin-right: .5rem;
 }
+
+.hc--dialog {
+  box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, .45);
+  width: 610px;
+  background-color: #ccc;
+  color: var(--hc-dark);
+  padding: .55rem 1.1rem;
+  border-radius: 4.5px;
+  position: fixed;
+  top: 3rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  transition: .28s;
+  z-index: 11000;
+}
+
+.hc--dialog-icon {
+  position: absolute;
+  top: 2px;
+  right: 7px;
+  color: var(--hc-danger);
+  cursor: pointer;
+}
+
+/* KeyFrames */
+@keyframes kfDialogIn {
+  from {
+    top: -50vw;
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  to {
+    top: 3rem;
+  }
+}
+
+@keyframes kfDialogOut {
+  from {
+    top: 3rem;
+    opacity: 1;
+  }
+
+  90% {
+    opacity: .3;
+  }
+
+  to {
+    top: -50vw;
+  }
+}
+
+.hc--dialog-animateIn {
+  animation-name: kfDialogIn;
+  animation-duration: .46s;
+  animation-fill-mode: forwards;
+}
+
+.hc--dialog-animateOut {
+  animation-name: kfDialogOut;
+  animation-duration: .74s;
+  animation-fill-mode: forwards;
+}

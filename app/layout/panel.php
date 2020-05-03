@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-    <?php echo get('page_title') !== 'undefined' ? str_replace('{app_name}', APP_NAME, get('page_title')) : APP_NAME ?>
-  </title>
+  <title><?= getPageTitle() ?></title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="<?= asset('../favicon.png') ?>" type="image/x-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&display=swap" rel="stylesheet">
 
   <!-- Main -->
   <link rel="stylesheet" href="<?= asset('css/main.css') ?>">
+  <link rel="stylesheet" href="<?= asset('css/harpia.components.css') ?>">
 
   <!-- HPanel -->
   <link rel="stylesheet" href="<?= asset('css/hpanel.css') ?>">

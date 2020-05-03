@@ -118,12 +118,15 @@ if (CREATE_DEFAULT_DATA) {
       'social_instagram' => '#',
       'social_linkedin' => '#',
       'social_youtube' => '#',
-      'page_title' => '{app_name}',
+      'page_title' => 'Harpia App',
       'meta_description' => 'Harpia Application',
       'meta_keywords' => 'application, harpia',
       'app_maintenance_url' => '',
       'app_maintenance_active' => '0',
       'app_maintenance_text' => 'Estamos em manutenção, tente novamente mais tarde.',
+      'app_page_404_text' => 'Erro 404 | Página não encontrada.',
+      'page_503_image' => '',
+      'page_404_image' => '',
     ];
 
     foreach ($create as $ref => $content) {

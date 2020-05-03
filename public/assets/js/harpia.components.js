@@ -45,7 +45,26 @@ const components = {
     classDef: 'hc--swiftBackground',
 
     onclick: null,
-  }
+  },
+  dialog: {
+    selector: 'dialog',
+    ...colors,
+
+    classAnimateIn: 'hc--dialog-animateIn',
+    classAnimateOut: 'hc--dialog-animateOut',
+    classDef: 'hc--dialog',
+    classIconContainer: 'hc--dialog-icon',
+
+    icon: 'close',
+    title: '',
+    description: '',
+    footer: '',
+
+    textColor: colors.dark,
+    backgroundColor: colors.light,
+
+    timeoutToRemove: 300,
+  },
 }
 
 let componentsTimeout = {
@@ -251,5 +270,81 @@ $swiftBackground = function(custom_options = {}) {
 $closeSwiftBackground = function() {
   let component = hget_component(components.swiftBackground);
   component.style.display = 'none';
+  return component;
+}
+
+$dialog = function(custom_options = {}) {
+
+  // Setting the options
+  const options = {
+    ...components.dialog,
+    ...custom_options,
+  };
+
+  component = hget_component(options, true);
+
+  // Setting content
+  content = {
+    icon: options.icon,
+    title: options.title,
+    description: options.description,
+    footer: options.footer,
+  }
+
+  if (content.footer !== '') content.footer = `<div style="border-top: 1px solid #e0e0e0; padding-top: 1rem; text-align: right">${content.footer}</div>`
+
+  component.innerHTML = `
+    <div class="${options.classIconContainer}"><span class="mdi mdi-${content.icon}" style="font-size: 1.45rem" onclick="$dialogClose()"></span></div>
+    <div style="text-align: center; font-size: 1.5rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 1rem">${content.title}</div>
+    <div style="padding-top: 1rem 0;">${content.description}</div>
+    ${content.footer}
+  `;
+
+  // Colors
+  if (options.backgroundColor) {
+    component.style.backgroundColor = options.backgroundColor
+  } else {
+    component.style.backgroundColor = colors.color_light
+  }
+
+  if (options.textColor) {
+    component.style.color = options.textColor
+  } else {
+    component.style.color = colors.color_dark
+  }
+  
+  // Classes
+  component.classList.contains(options.classAnimateIn)
+      component.classList.remove(options.classAnimateIn);
+  component.classList.contains(options.classAnimateOut)
+      component.classList.remove(options.classAnimateOut);
+
+  component.classList.add(options.classDef);
+  component.classList.add(options.classAnimateIn);
+
+  // Finally displaying component
+  component.style.display = '';
+  $swiftBackground({ onclick: $dialogClose });
+  
+  return component;
+}
+
+$dialogClose = function() {
+
+  let component = hget_component(components.dialog);
+
+  // Classes
+  component.classList.contains(components.dialog.classAnimateIn)
+      component.classList.remove(components.dialog.classAnimateIn);
+  component.classList.contains(components.dialog.classAnimateOut)
+      component.classList.remove(components.dialog.classAnimateOut);
+
+  component.classList.add(components.dialog.classAnimateOut);
+
+  setTimeout(() => {
+    component.style.display = 'none';
+    $closeSwiftBackground()
+  }, components.dialog.timeoutToRemove);
+
   return component;
 }

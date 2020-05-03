@@ -1,7 +1,7 @@
 <?php
 
 Route::get('/', function () {
-  view('index');
+  view('index', ['page_title' => 'Página Inicial - {app_name}']);
 });
 
 // Painel
@@ -33,7 +33,7 @@ Route::post('/painel/post/delete', 'PanelController@deletePostAction');
 
 // Authentication routes
 Route::get('/login', function () {
-  view('auth/login');
+  view('auth/login', ['page_title' => 'Login - {app_name}']);
 });
 
 Route::get('/register', function() {

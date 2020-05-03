@@ -9,29 +9,34 @@
 <div class="container">
   <div class="hp-tooltips">
 
-    <div class="hp-tooltip-card">
+    <div class="hp-tooltip-card" onclick="redirect('./painel/info')">
       <h4 class="hp-tooltip-icon-hover-info">Informações</h4>
       <div><span class="mdi mdi-information hp-tooltip-icon hp-tooltip-icon-hover-info"></span></div>
     </div>
 
-    <div class="hp-tooltip-card">
+    <div class="hp-tooltip-card" onclick="redirect('./painel/usuarios')">
       <h4 class="hp-tooltip-icon-hover-success">Usuários</h4>
       <div><span class="mdi mdi-account-multiple hp-tooltip-icon hp-tooltip-icon-hover-success"></span></div>
     </div>
 
-    <div class="hp-tooltip-card">
+    <div class="hp-tooltip-card" onclick="redirect('./painel/post/lista')">
       <h4>Postagens</h4>
       <div><span class="mdi mdi-folder-multiple hp-tooltip-icon"></span></div>
     </div>
 
-    <div class="hp-tooltip-card">
+    <!-- <div class="hp-tooltip-card">
       <h4 class="hp-tooltip-icon-hover-warning">Modo de Edição</h4>
       <div><span class="mdi mdi-pencil-box-multiple hp-tooltip-icon hp-tooltip-icon-hover-warning"></span></div>
-    </div>
+    </div> -->
 
-    <div class="hp-tooltip-card">
+    <!-- <div class="hp-tooltip-card">
       <h4 class="hp-tooltip-icon-hover-power">Cores Padrões</h4>
       <div><span class="mdi mdi-palette hp-tooltip-icon hp-tooltip-icon-hover-power"></span></div>
+    </div> -->
+
+    <div class="hp-tooltip-card" onclick="redirect('./painel/config/site')">
+      <h4 class="hp-tooltip-icon-hover-info">Configurações</h4>
+      <div><span class="mdi mdi-cog hp-tooltip-icon hp-tooltip-icon-hover-info"></span></div>
     </div>
 
   </div>

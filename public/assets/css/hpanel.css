@@ -2,7 +2,7 @@
   --hp-primary: #1D6BEC;
   --hp-secondary: #dfdfdf;
   --hp-success: #24D548;
-  --hp-danger: #E6152C;
+  --hp-danger: #db0d2c;
   --hp-warning: #FFB138;
   --hp-info: #30D696;
   --hp-dark: #303030;
@@ -165,6 +165,20 @@ body {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+.hp-alert {
+  background-color: var(--hp-danger);
+  padding: .7rem 1.5rem;
+  color: var(--hp-light);
+  border-radius: 4.5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  user-select: none;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.hp-alert:hover {
+  box-shadow: 0 7px 14px rgba(0,0,0,0.25), 0 5px 5px rgba(0,0,0,0.22);
 }
 
 @media (max-width: 766px) {

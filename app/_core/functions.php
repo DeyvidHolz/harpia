@@ -191,7 +191,8 @@ function debug($var, $ref = null) {
 
 function getPageTitle() {
   $pageTitle = get('page_title');
-  if (empty($pageTitle) || $pageTitle === 'undefined') return APP_NAME;
+
+  if (empty($pageTitle) || $pageTitle === 'undefined') return APP_CONTENT_PAGE_TITLE ? APP_CONTENT_PAGE_TITLE : APP_NAME;
 
   if (APP_CONTENT_PAGE_TITLE && !empty(APP_CONTENT_PAGE_TITLE)) {
     return str_replace('{app_name}', APP_CONTENT_PAGE_TITLE, $pageTitle);
