@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-    <?php echo get('page.title') !== 'undefined' ? str_replace('{app_name}', APP_NAME, get('page.title')) : APP_NAME ?>
+    <?php echo get('page_title') !== 'undefined' ? str_replace('{app_name}', APP_NAME, get('page_title')) : APP_NAME ?>
   </title>
 
   <!-- Google Fonts -->

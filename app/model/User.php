@@ -14,6 +14,8 @@ class User extends Model
   public static $table = 'users';
   public static $fillable = ['id', 'name', 'login', 'email', 'password'];
 
+  // public static $joinType = 'INNER';
+
   public function createHash() {
     $this->password = password_hash($this->password, PASSWORD_BCRYPT);
   }

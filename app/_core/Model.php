@@ -390,4 +390,126 @@ abstract class Model
     return $users;
   }
 
+  public static function join(Array $joins) 
+  {
+
+    $query = null;
+
+    $tablesToJoin = [];
+    $preparedJoinArr = [];
+    $wheres = [];
+
+    if (isset($joins['where'])) {
+      if (isset($joins['where'][0]) && is_array($joins['where'][0])) {
+        foreach ($joins['where'] as $where) {
+          $wheres[] = $where;
+        }
+      } else {
+        $wheres[] = $joins['where'];
+      }
+    }
+    unset ($joins['where']);
+
+    foreach ($joins as $table => $join) {
+      $tablesToJoin[] = $table;
+
+      $tempClause = $join['clause'];
+      $tempClause = preg_replace('/\{t1\}|\{table1\}/', static::$table, $tempClause);
+      $tempClause = preg_replace('/\{t2\}|\{table2\}/', $table, $tempClause);
+      $tempClause = preg_replace('/(\w*)\.(\w*)/i', '`$1`.`$2`', $tempClause);
+      
+      $preparedJoinArr[$table]['clause'] = $tempClause;
+      if (!isset($preparedJoinArr[$table]['joinFillable'])) $preparedJoinArr[$table]['modelFillable'] = '';
+      if (!isset($preparedJoinArr[$table]['joinFillable'])) $preparedJoinArr[$table]['joinFillable'] = '';
+
+      if (!isset($join[1])) {
+        $join[1] = $join[0];
+        unset($join[0]);
+      }
+
+      if (!isset($join[0])) $join[0] = static::$fillable;
+      
+      if (isset($join['t1_prefix'])) {
+        foreach ($join[0] as $modelFillable) {
+          $preparedJoinArr[$table]['modelFillable'] .= sprintf("`%s`.`%s` AS `%s`,", static::$table, $modelFillable, $join['t1_prefix'].$modelFillable);
+        }
+      } else {
+        foreach ($join[0] as $modelFillable) {
+          $preparedJoinArr[$table]['modelFillable'] .= sprintf("`%s`.`%s`,", static::$table, $modelFillable);
+        }
+      }
+
+      if (isset($join['t2_prefix'])) {
+        foreach ($join[1] as $joinFillable) {
+          $preparedJoinArr[$table]['joinFillable'] .= sprintf("`%s`.`%s` AS `%s`,", $table, $joinFillable, $join['t2_prefix'].$joinFillable);
+        }
+      } else {
+        foreach ($join[1] as $joinFillable) {
+          $preparedJoinArr[$table]['joinFillable'] .= sprintf("`%s`.`%s`,", $table, $joinFillable);
+        }
+      }
+
+      // $preparedJoinArr[$table]['modelFillable'] = preg_replace('/,$/', '', $preparedJoinArr[$table]['modelFillable']);
+      // $preparedJoinArr[$table]['joinFillable'] = preg_replace('/,$/', '', $preparedJoinArr[$table]['joinFillable']);
+    }
+
+    $joinType = isset(static::$joinType) ? static::$joinType . ' JOIN' : 'LEFT JOIN';
+
+    $fillable = '';
+    $joins = '';
+    foreach ($preparedJoinArr as $table => $join) {
+      $fillable .= $join['modelFillable'] . ',' . $join['joinFillable'];
+      $joins .= sprintf("%s `%s` ON %s ", $joinType, $table, $join['clause']);
+    }
+
+    $where = '';
+    $toBind = [];
+    if (count($wheres)) {
+      $useOperator = count($wheres) > 1 ? true : false;
+      $bindCount = 0;
+
+      foreach ($wheres as $w) {
+        $bindCount++;
+
+        // Preventing ambiguous
+        $w[0] = preg_replace('/\{table\}/i', static::$table, $w[0]);
+        $table = explode('.', $w[0]);
+        if (count($table) < 2) {
+          $table = static::$table;
+        } else {
+          $table = $table[0];
+        }
+        $w[0] = preg_replace('/(\w+)\./', '', $w[0]);
+
+        if ($useOperator) {
+          if (!isset($w['operator'])) $w['operator'] = 'AND';
+          $where .= sprintf('`%s`.`%s` %s :%s %s ', $table, $w[0], $w[1], $w[0].$bindCount, $w['operator']);
+        } else {
+          $where .= sprintf('`%s`.`%s` %s :%s ', $table, $w[0], $w[1], $w[0].$bindCount);
+        }
+        $toBind[] = ['bind' => ':'.$w[0].$bindCount, 'value' => $w[2]];
+      }
+      $where = 'WHERE '.preg_replace('/ OR $| AND $/', '', $where);
+    }
+
+    $query = "SELECT $fillable FROM `" . static::$table . "` $joins $where";
+    $query = str_replace(', FROM', 'FROM', $query);
+    $query = str_replace(',,', ',', $query);
+    $stmt = getConnection()->prepare($query);
+
+    foreach ($toBind as $bind) {
+      $stmt->bindValue($bind['bind'], $bind['value']);
+    }
+
+    if ($stmt->execute()) {
+      if ($stmt->rowCount()) {
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+      }
+    } else {
+      harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
+    }
+
+    return false;
+  }
+
 }

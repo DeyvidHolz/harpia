@@ -5,9 +5,14 @@ Route::get('/', function () {
 });
 
 // Painel
+Route::get('/painel', 'PanelController@index');
+Route::get('/painel/info/save', 'PanelController@saveAppContent');
+Route::get('/painel/info/seo', 'PanelController@infoSeo');
+Route::get('/painel/info', 'PanelController@info');
+
+Route::get('/painel/config/site', 'PanelController@configSite');
 
 // - Usuário
-Route::get('/painel', 'PanelController@index');
 Route::get('/painel/usuarios', 'PanelController@viewAll');
 Route::get('/painel/usuario/{id}', 'PanelController@editUser');
 Route::get('/painel/usuario/novo', 'PanelController@newUser');
@@ -32,7 +37,7 @@ Route::get('/login', function () {
 });
 
 Route::get('/register', function() {
-  view('auth/register');
+  view('auth/register', ['page_title' => 'Crie uma conta - {app_name}']);
 });
 
 Route::get('/logout', 'AuthController@logout');

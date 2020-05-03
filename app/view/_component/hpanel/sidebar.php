@@ -42,39 +42,52 @@
         <ul class="collapsible collapsible-accordion">
 
           <li>
-            <a href="#" class="collapsible-header waves-effect arrow-r">
-              <span class="mdi mdi-arrow-right"></span> Informações Padrões
-            </a>
-
-            <!-- <div class="collapsible-body">
-              <ul class="list-unstyled">
-                <li><a href="#" class="waves-effect"><span class="mdi mdi-eye mr-1"></span> Listagem</a></li>
-              </ul>
-            </div> -->
-          </li>
-
-          <li>
             <a class="collapsible-header waves-effect arrow-r">
-              <span class="mdi mdi-arrow-right"></span> Usuários
+              <span class="mdi mdi-view-dashboard mr-2"></span> Informações Padrões
             </a>
 
             <div class="collapsible-body">
               <ul class="list-unstyled">
-                <li><a href="<?= PUBLIC_PATH ?>painel/usuario/novo" class="waves-effect"><span class="mdi mdi-account-plus mr-1"></span> Criar novo usuário</a></li>
-                <li><a href="<?= PUBLIC_PATH ?>painel/usuarios" class="waves-effect"><span class="mdi mdi-account-multiple mr-1"></span> Listagem</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/info" class="waves-effect"><span class="mdi mdi-view-dashboard-outline mr-2"></span> Informações gerais</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/info/seo" class="waves-effect"><span class="mdi mdi-google mr-2"></span> SEO</a></li>
               </ul>
             </div>
           </li>
 
           <li>
             <a class="collapsible-header waves-effect arrow-r">
-              <span class="mdi mdi-arrow-right"></span> Blog
+              <span class="mdi mdi-account-multiple mr-2"></span> Usuários
             </a>
 
             <div class="collapsible-body">
               <ul class="list-unstyled">
-                <li><a href="<?= PUBLIC_PATH ?>painel/post/novo" class="waves-effect"><span class="mdi mdi-folder-plus mr-1"></span> Nova postagem</a></li>
-                <li><a href="<?= PUBLIC_PATH ?>painel/post/lista" class="waves-effect"><span class="mdi mdi-folder-multiple mr-1"></span> Listagem</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/usuario/novo" class="waves-effect"><span class="mdi mdi-account-plus mr-2"></span> Criar novo usuário</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/usuarios" class="waves-effect"><span class="mdi mdi-account-multiple mr-2"></span> Ver todos</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li>
+            <a class="collapsible-header waves-effect arrow-r">
+              <span class="mdi mdi-folder-open mr-2"></span> Blog
+            </a>
+
+            <div class="collapsible-body">
+              <ul class="list-unstyled">
+                <li><a href="<?= PUBLIC_PATH ?>painel/post/novo" class="waves-effect"><span class="mdi mdi-folder-plus mr-2"></span> Nova postagem</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/post/lista" class="waves-effect"><span class="mdi mdi-folder-multiple mr-2"></span> Ver todas</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li>
+            <a class="collapsible-header waves-effect arrow-r">
+              <span class="mdi mdi-cogs mr-2"></span> Configurações
+            </a>
+
+            <div class="collapsible-body">
+              <ul class="list-unstyled">
+                <li><a href="<?= PUBLIC_PATH ?>painel/config/site" class="waves-effect"><span class="mdi mdi-cog mr-2"></span> Site</a></li>
               </ul>
             </div>
           </li>

@@ -3,14 +3,28 @@
 // @Config: DB_FUNC_CREATE_TABLES (def: true)
 // To fix Foreign Key errors, use this file to create your database tables in order.
 
+const CREATE_DEFAULT_DATA = true;
+
 foreach (scandir("../app/model/") as $filename) {
   $path = "../app/model/" . '/' . $filename;
   if (is_file($path)) {
-      require $path;
+    require $path;
   }
 }
 
 // Write below
+
+AppContent::createDbTable([
+  'name' => AppContent::$table,
+  'columns' => [
+    'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+    'ref' => 'VARCHAR(255)',
+    'type' => 'VARCHAR(255)',
+    'content' => 'MEDIUMTEXT',
+    'action' => 'VARCHAR(255)',
+  ],
+  'foreignKeys' => [], 
+]);
 
 User::createDbTable([
   'name' => User::$table,
@@ -25,6 +39,31 @@ User::createDbTable([
     // 'modelColumn' => 'tableReferenced|id|onUpdate:cascade',
   ], 
   'option.createTimestampColumns' => true,
+]);
+
+PermissionGroup::createDbTable([
+  'name' => PermissionGroup::$table,
+  'columns' => [
+    'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+    'name' => 'VARCHAR(256) NOT NULL',
+    'permissions' => 'MEDIUMTEXT NOT NULL',
+  ],
+  'foreignKeys' => [
+    // 'modelColumn' => 'tableReferenced|id|onChange:cascade',
+  ],
+]);
+
+Permission::createDbTable([
+  'name' => Permission::$table,
+  'columns' => [
+    'id' => 'INT NOT NULL PRIMARY KEY AUTO_INCREMENT',
+    'group_id' => 'INT',
+    'user_id' => 'int NOT NULL',
+  ],
+  'foreignKeys' => [
+    'group_id' => PermissionGroup::$table.'|id|onChange:cascade',
+    'user_id' => User::$table.'|id|onChange:cascade',
+  ],
 ]);
 
 Post::createDbTable([
@@ -44,3 +83,55 @@ Post::createDbTable([
     'user_id' => User::$table . '|id|onChange:cascade',
   ],
 ]);
+
+if (CREATE_DEFAULT_DATA) {
+  if (!User::getAll()) {
+    $user = new User();
+    $user->name = 'Admin';
+    $user->login = 'admin';
+    $user->password = 'admin';
+    $user->createHash();
+    User::save($user);
+  }
+  
+  $pg = new PermissionGroup();
+  $pg->name = 'admin';
+  $pg->permissions = '*';
+  $pg->create();
+  
+  if (!Permission::getAll()) {
+    $p = new Permission();
+    $p->group_id = 1;
+    $p->user_id = 1;
+    Permission::save($p);
+  }
+
+  if (!AppContent::getAll()) {
+    $create = [
+      'email_main' => 'example@example.com',
+      'email_contact' => 'contact@example.com',
+      'email_noreply' => 'noreply@example.com',
+      'phone' => '0000000000',
+      'whatsapp' => '00000000000',
+      'address' => '',
+      'social_facebook' => '#',
+      'social_instagram' => '#',
+      'social_linkedin' => '#',
+      'social_youtube' => '#',
+      'page_title' => '{app_name}',
+      'meta_description' => 'Harpia Application',
+      'meta_keywords' => 'application, harpia',
+      'app_maintenance_url' => '',
+      'app_maintenance_active' => '0',
+      'app_maintenance_text' => 'Estamos em manutenção, tente novamente mais tarde.',
+    ];
+
+    foreach ($create as $ref => $content) {
+      $appContent = new AppContent();
+      $appContent->ref = $ref;
+      $appContent->content = $content;
+      AppContent::save($appContent);
+    }
+
+  }
+}

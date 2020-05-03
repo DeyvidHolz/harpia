@@ -2,13 +2,41 @@
 
 Core::useModel('User');
 Core::useModel('Post');
+Core::useModel('PermissionGroup');
+Core::useModel('Permission');
+
 PanelController::checkAuth();
+
+if (!Permission::hasPermission($_SESSION['id'], 'panel.access')) {
+  redirect('@/');
+}
 
 class PanelController
 {
 
   public function index() {
     view('panel/index');
+  }
+
+  public function info() {
+    $data = ['appContent' => AppContent::getReferenced(true)];
+    view('panel/info', $data);
+  }
+
+  public function infoSeo() {
+    $data = ['appContent' => AppContent::getReferenced(true)];
+    view('panel/info_seo', $data);
+  }
+
+  public function configSite() {
+    $data = ['appContent' => AppContent::getReferenced(true)];
+    view('panel/config_site', $data);
+  }
+
+  public function saveAppContent($request) {
+    $appContent = AppContent::whereOne(['ref', '=', $request->body->ref]);
+    $appContent->content = $request->body->content;
+    response(AppContent::save($appContent));
   }
 
   public function viewAll() {

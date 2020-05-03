@@ -181,10 +181,21 @@ function redirect($route, $data = null) {
   exit;
 }
 
-function debug($var) {
+function debug($var, $ref = null) {
   echo '<pre>';
-  echo '<span style="color: #2770e6"><strong>Debugging:</strong></span><br><br>';
+  echo '<span style="color: #2770e6"><strong>Debugging:</strong>&nbsp;'.$ref.'</span><br><br>';
   print_r($var);
   echo '<hr>';
   echo '</pre>';
+}
+
+function getPageTitle() {
+  $pageTitle = get('page_title');
+  if (empty($pageTitle) || $pageTitle === 'undefined') return APP_NAME;
+
+  if (APP_CONTENT_PAGE_TITLE && !empty(APP_CONTENT_PAGE_TITLE)) {
+    return str_replace('{app_name}', APP_CONTENT_PAGE_TITLE, $pageTitle);
+  } else {
+    return str_replace('{app_name}', APP_NAME, $pageTitle);
+  }
 }

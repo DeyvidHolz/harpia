@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>
-    <?php echo get('page.title') !== 'undefined' ? str_replace('{app_name}', APP_NAME, get('page.title')) : APP_NAME ?>
-  </title>
+  <title><?= getPageTitle() ?></title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&display=swap" rel="stylesheet">

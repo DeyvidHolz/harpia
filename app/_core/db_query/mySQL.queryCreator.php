@@ -38,7 +38,7 @@ class MySQLQueryCreator
     if (isset($arr['foreignKeys']) && is_array($arr['foreignKeys']) && count($arr['foreignKeys']))  {
       foreach ($arr['foreignKeys'] as $index => $foreignKey) {
         $foreignKeyArr = explode('|', $foreignKey);
-        $columns .= 'CONSTRAINT `fk_' . $index . '` FOREIGN KEY (`' . $index . '`) REFERENCES `' . $foreignKeyArr[0] . '`(`' . $foreignKeyArr[1] . '`) ';
+        $columns .= 'CONSTRAINT `fk_' . $index . '_' . $arr['name'] . '` FOREIGN KEY (`' . $index . '`) REFERENCES `' . $foreignKeyArr[0] . '`(`' . $foreignKeyArr[1] . '`) ';
 
         // onUpdate, onDelete, onChange
         foreach ($foreignKeyArr as $fk) {
@@ -94,6 +94,8 @@ class MySQLQueryCreator
       // Checking queries to execute after table creation
       if ($toExecute) executeQuery($toExecute);
       return true;
+    } else {
+      harpErr(['mySQL Error' => $stmt->errorInfo()[1] . ': ' . $stmt->errorInfo()[2], 'Query Sent' => $stmt->debugDumpParams(), 'Model Query' => $query],__LINE__,__FILE__);
     }
 
     return false;

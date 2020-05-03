@@ -17,9 +17,8 @@ require_once "../app/_core/Resource.php";
 require_once "../app/_core/Layout.php";
 require_once "../app/_core/Component.php";
 
-require_once "../app/config.php";
 require_once "../app/routes.php";
-require_once "../app/global.packages.php";
+require_once "../app/config.php";
 
 if (SESSION_AUTO_START) session_start();
 
@@ -43,6 +42,9 @@ define('URL', $url);
 $publicPath = sprintf("%s://%s%s", $_SERVER['REQUEST_SCHEME'], $_SERVER['SERVER_NAME'], $_SERVER['SCRIPT_NAME']);
 $publicPath = str_replace('index.php', '', $publicPath);
 define('PUBLIC_PATH', $publicPath);
+
+// Getting packages
+require_once "../app/global.packages.php";
 
 // Defining PATH
 $path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
@@ -119,6 +121,22 @@ if ($route) {
       if (preg_match($regex, $url)) {
         http_response_code(503);
         view(VIEW_SERVICE_UNAVAILABLE);
+        exit;
+      }
+    }
+  } else if (APP_CONTENT_IN_MAINTENANCE && !empty(APP_CONTENT_IN_MAINTENANCE_URL)) {
+    if (APP_CONTENT_IN_MAINTENANCE_URL === '*') {
+      http_response_code(503);
+      view(VIEW_SERVICE_UNAVAILABLE, ['text' => APP_CONTENT_IN_MAINTENANCE_TEXT]);
+      exit;
+    } else {
+      $url = URL;
+      $maintenanceURL = APP_CONTENT_IN_MAINTENANCE_URL;
+      $regex = preg_replace('/\//', '\/', $maintenanceURL);
+      $regex = '/' . $regex . '/';
+      if (preg_match($regex, $url)) {
+        http_response_code(503);
+        view(VIEW_SERVICE_UNAVAILABLE, ['text' => APP_CONTENT_IN_MAINTENANCE_TEXT]);
         exit;
       }
     }

@@ -10,6 +10,7 @@ class AuthController
     if (!empty($request->body->login) && !empty($request->body->password)) {
       $auth = User::auth($request->body->login, $request->body->password);
       if ($auth['status']) {
+        unset($_SESSION['auth.error']);
         return redirect('@/painel');
       }
       $_SESSION['auth.error'] = $auth['error'];
