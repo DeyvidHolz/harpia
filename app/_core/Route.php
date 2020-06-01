@@ -1,8 +1,15 @@
 <?php
 
-$routes = [];
+$routes = [
+  'GET' => [],
+  'POST' => [],
+  'PATCH' => [],
+  'PUT' => [],
+  'DELETE' => [],
+  'OPTIONS' => [],
+];
 
-function setRoute(Route $route) {
+function setRoute(Route $route, $method = 'GET') {
   global $routes;
 
   $path = $route->path;
@@ -18,7 +25,7 @@ function setRoute(Route $route) {
   $truePathSplit = array_values($truePathSplit);
 
 
-  $routes[$path] = [
+  $routes[$method][$path] = [
     'checkPath' => $path,
     'truePath' => $route->path,
     'truePathSplit' => $truePathSplit,
@@ -38,42 +45,63 @@ class Route
   public $controller = '';
   public $params = [];
 
-  public static function get(String $path, $controller = null) {
-    if (!$controller) {
-      harpErr(['Route Error' => "Route '$path': controller param not valid. Check the routes file."],__LINE__,__FILE__);
-      die;
-    }
-
-    $route = new Route();
-    $route->path = $path;
-    $route->controller = $controller;
-    $route->method = 'GET';
+  public static function get(String $path, $controller = null) 
+  {
+    $route = $route = self::_getMountedRouteObject($path, $controller, 'POST');
     setRoute($route);
   }
 
-  public static function post(String $path, $controller = null) {
-    if (!$controller) {
-      harpErr(['Route Error' => "Route '$path': controller param not valid. Check the routes file."],__LINE__,__FILE__);
-      die;
-    }
-
-    $route = new Route();
-    $route->path = $path;
-    $route->controller = $controller;
-    $route->method = 'POST';
-
-    setRoute($route);
+  public static function post(String $path, $controller = null) 
+  {
+    $route = self::_getMountedRouteObject($path, $controller, 'POST');
+    setRoute($route, $route->method);
   }
 
-  public static function getRoute(Array $arrRoute, $params = null) {
-    global $routes;
-    
+  public static function patch(String $path, $controller = null) 
+  {
+    $route = self::_getMountedRouteObject($path, $controller, 'PATCH');
+    setRoute($route, $route->method);
+  }
+
+  public static function delete(String $path, $controller = null) 
+  {
+    $route = self::_getMountedRouteObject($path, $controller, 'DELETE');
+    setRoute($route, $route->method);
+  }
+
+  public static function put(String $path, $controller = null) 
+  {
+    $route = self::_getMountedRouteObject($path, $controller, 'PUT');
+    setRoute($route, $route->method);
+  }
+
+  public static function options(String $path, $controller = null) 
+  {
+    $route = self::_getMountedRouteObject($path, $controller, 'OPTIONS');
+    setRoute($route, $route->method);
+  }
+
+  public static function getRoute(Array $arrRoute, $params = null) 
+  {
     $route = new Route();
     $route->path = $arrRoute['checkPath'];
     $route->method = $_SERVER['REQUEST_METHOD'];
     $route->controller = $arrRoute['controller'];
     $route->params = $params;
 
+    return $route;
+  }
+
+  public static function _getMountedRouteObject($path, $controller, $method = 'GET') {
+    if (!$controller) {
+      harpErr(['Route Error' => "Route '$path': controller param not valid. Check the routes file."],__LINE__,__FILE__);
+      die;
+    }
+
+    $route = new Route();
+    $route->path = $path;
+    $route->controller = $controller;
+    $route->method = $method;
     return $route;
   }
 

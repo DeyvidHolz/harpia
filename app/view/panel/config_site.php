@@ -4,7 +4,9 @@
 <div class="pb-5"></div>
 
 <div class="container mt-3">
-  <h2 class="text-center">Configurações - Site</h2>
+  <h2 class="text-center pointer"
+    onclick="$notificate({ backgroundColor: colors.color_dark, icon: 'information-variant', description: 'Configurações gerais do site' })"
+  >Configurações - Site</h2>
   <hr>
 </div>
 
@@ -40,7 +42,9 @@
   <div class="row">
 
     <div class="col-12">
-      <h5 class="text-center">Página 404: Texto</h5>
+      <h5 class="text-center pointer"
+        onclick="$notificate({ backgroundColor: colors.color_dark, icon: 'information-variant', description: 'Texto que aparecerá caso uma página não seja encontrada' })"
+      >Página 404: Texto</h5>
     </div>
 
     <div class="col-12">
@@ -55,19 +59,31 @@
 
 <div class="hp-container swift-box-shadow defined-lg mb-5">
   <h5 class="text-center">Página de manutenção: Imagem</h5>
-  <div class="text-center">
-    <img id="img_503" src="" width="200">
+  <div class="text-center mt-3">
+    <img id="img_503" src="" width="200" class="pointer" 
+      onclick="$notificate({ backgroundColor: colors.color_dark, icon: 'information-variant', description: 'Imagem que aparecerá caso o site esteja em manutenção' })">
 
     <div>
-      <button type="button" class="btn btn-success btn-sm mt-2" onclick="getImageChanger('page_503_image')">Alterar</button>
+      <button type="button" class="btn btn-success btn-sm mt-3" onclick="getImageChanger('page_503_image')">Alterar</button>
     </div>
   </div>
 
   <h5 class="text-center mt-5">Página 404: Imagem</h5>
-  <div class="text-center">
-    <img id="img_404" src="" width="200">
+  <div class="text-center mt-3">
+    <img id="img_404" src="" width="200" class="pointer"
+      onclick="$notificate({ backgroundColor: colors.color_dark, icon: 'information-variant', description: 'Imagem que aparecerá caso uma página não seja encontrada' })">
     <div>
-      <button type="button" class="btn btn-success btn-sm mt-2"  onclick="getImageChanger('page_404_image')">Alterar</button>
+      <button type="button" class="btn btn-success btn-sm mt-3"  onclick="getImageChanger('page_404_image')">Alterar</button>
+    </div>
+  </div>
+
+  <h5 class="text-center mt-5">Favicon: Ícone</h5>
+  <div class="text-center mt-3">
+    <img id="favicon" src="" width="80" class="pointer" 
+      onclick="$notificate({ backgroundColor: colors.color_dark, icon: 'information-variant', description: 'Ícone que aparece na guia do navegador' })">
+
+    <div>
+      <button type="button" class="btn btn-success btn-sm mt-3" onclick="getImageChanger('favicon')">Alterar</button>
     </div>
   </div>
 </div>
@@ -92,11 +108,12 @@
 
     document.querySelector('#img_503').src = data.page_503_image.content !== '' ? `${public_path}storage/${data.page_503_image.content}` : `${public_path}assets/img/503.png`;
     document.querySelector('#img_404').src = data.page_404_image.content !== '' ? `${public_path}storage/${data.page_404_image.content}` : `${public_path}assets/img/404.png`;
+    document.querySelector('#favicon').src = data.favicon.content !== '' ? `${public_path}storage/${data.favicon.content}` : `${public_path}storage/favicon.png`;
 
   });
 
   function setContent(id, val) {
-    document.getElementById(id).value = val.content;
+    document.getElementById(id).value = val && val.content ? val.content : '';
     document.getElementById(id).addEventListener('keyup', function() {
       saveContent(id, this.value)
     })

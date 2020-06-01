@@ -1,7 +1,7 @@
 const colors = {
   color_primary: '#1D6BEC',
   color_secondary: '#C3C3C3',
-  color_success: '#24D548',
+  color_success: '#37cc50',
   color_warning: '#FFB138',
   color_danger: '#E6152C',
   color_info: '#30D696',
@@ -63,7 +63,41 @@ const components = {
     textColor: colors.dark,
     backgroundColor: colors.light,
 
-    timeoutToRemove: 300,
+    timeoutToRemove: 560,
+  },
+  window: {
+    selector: 'window',
+    ...colors,
+
+    centerContent: false,
+
+    classAnimateIn: 'hc--window-animateIn',
+    classAnimateOut: 'hc--window-animateOut',
+    classDef: 'hc--window',
+
+    content: '',
+
+    textColor: colors.dark,
+    backgroundColor: colors.light,
+
+    timeoutToRemove: 560,
+  },
+  loading: {
+    selector: 'loading',
+    ...colors,
+    
+    classAnimateIn: 'hc--loading-animateIn',
+    classAnimateOut: 'hc--loading-animateOut',
+    classDef: 'hc--loading',
+    classIconContainer: 'hc--loading-icon',
+    
+    path: 'http://localhost/harpia/public/assets/img/loading.gif',
+    text: null,
+    
+    textColor: colors.dark,
+    color: colors.light,
+
+    timeoutToRemove: 560,
   },
 }
 
@@ -348,3 +382,153 @@ $dialogClose = function() {
 
   return component;
 }
+
+$window = function(custom_options = {}) {
+
+  // Setting the options
+  const options = {
+    ...components.window,
+    ...custom_options,
+  };
+
+  component = hget_component(options, true);
+
+  // Setting content
+  content = {
+    content: options.content
+  }
+
+  if (options.centerContent) {
+    component.classList.add('hc--window-center');
+  }
+
+  component.innerHTML = `
+    <div class="hc--window-close-icon"><span class="mdi mdi-close" style="font-size: 1.45rem; cursor: pointer" onclick="$windowClose()"></span></div>
+    ${content.content}
+  `;
+
+  // Colors
+  if (options.backgroundColor) {
+    component.style.backgroundColor = options.backgroundColor
+  } else {
+    component.style.backgroundColor = colors.color_light
+  }
+
+  if (options.textColor) {
+    component.style.color = options.textColor
+  } else {
+    component.style.color = colors.color_dark
+  }
+  
+  // Classes
+  component.classList.contains(options.classAnimateIn)
+      component.classList.remove(options.classAnimateIn);
+  component.classList.contains(options.classAnimateOut)
+      component.classList.remove(options.classAnimateOut);
+
+  component.classList.add(options.classDef);
+  component.classList.add(options.classAnimateIn);
+
+  // Finally displaying component
+  component.style.display = '';
+  $swiftBackground({ onclick: $windowClose });
+  
+  return component;
+}
+
+$windowClose = function() {
+
+  let component = hget_component(components.window);
+
+  // Classes
+  component.classList.contains(components.window.classAnimateIn)
+      component.classList.remove(components.window.classAnimateIn);
+  component.classList.contains(components.window.classAnimateOut)
+      component.classList.remove(components.window.classAnimateOut);
+
+  component.classList.add(components.window.classAnimateOut);
+
+  setTimeout(() => {
+    component.style.display = 'none';
+    $closeSwiftBackground()
+  }, components.window.timeoutToRemove);
+
+  return component;
+}
+
+$loading = function(custom_options = {}) {
+
+  // Setting the options
+  const options = {
+    ...components.loading,
+    ...custom_options,
+  };
+
+  component = hget_component(options, true);
+
+  // Setting content
+  content = {
+    path: options.path,
+    text: options.text,
+  }
+
+  component.innerHTML = `
+  <img src="${content.path}">
+  `;
+  if (content.text) component.innerHTML += `<div>${content.text}</div>`;
+
+  // Colors
+  if (options.backgroundColor) {
+    component.style.backgroundColor = options.backgroundColor
+  } else {
+    component.style.backgroundColor = colors.color_light
+  }
+
+  if (options.textColor) {
+    component.style.color = options.textColor
+  } else {
+    component.style.color = colors.color_dark
+  }
+  
+  // Classes
+  component.classList.contains(options.classAnimateIn)
+      component.classList.remove(options.classAnimateIn);
+  component.classList.contains(options.classAnimateOut)
+      component.classList.remove(options.classAnimateOut);
+
+  component.classList.add(options.classDef);
+  component.classList.add(options.classAnimateIn);
+
+  // Finally displaying component
+  component.style.display = '';
+  
+  return component;
+}
+
+$loadingClose = function() {
+
+  let component = hget_component(components.loading);
+
+  // Classes
+  component.classList.contains(components.loading.classAnimateIn)
+      component.classList.remove(components.loading.classAnimateIn);
+  component.classList.contains(components.loading.classAnimateOut)
+      component.classList.remove(components.loading.classAnimateOut);
+
+  component.classList.add(components.loading.classAnimateOut);
+
+  setTimeout(() => {
+    component.style.display = 'none';
+  }, components.loading.timeoutToRemove);
+
+  return component;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('[img-view]').forEach(img => {
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', function() {
+      $window({ content: `<img src="${img.src}">`, centerContent: true })
+    });
+  });
+});

@@ -1,5 +1,10 @@
 <?php
 
+const KB = 1024;
+const MB = 1048576;
+const GB = 1073741824;
+const TB = 1099511627776;
+
 require_once "../app/_core/functions.php";
 
 require_once "../app/_core/Core.php";
@@ -20,6 +25,9 @@ require_once "../app/_core/Component.php";
 require_once "../app/routes.php";
 require_once "../app/config.php";
 
+const def = '@';
+const PANEL_VERSION = 'v1.0.1';
+
 if (SESSION_AUTO_START) session_start();
 
 date_default_timezone_set(CONF_DEFAULT_TIMEZONE);
@@ -27,6 +35,8 @@ date_default_timezone_set(CONF_DEFAULT_TIMEZONE);
 if (DB_FUNC_CREATE_TABLES) {
   require_once "../app/_table.create.order.php";
 }
+
+$_SERVER['REQUEST_SCHEME'] = $_SERVER['REQUEST_SCHEME'] ?? 'http';
 
 // @TODO: melhorar código para ficar mais legível.
 
@@ -39,7 +49,7 @@ if (isset($_SERVER['SERVER_PORT'])) $url .= ':'.$_SERVER['SERVER_PORT'];
 $url .= $_SERVER['REQUEST_URI'];
 define('URL', $url);
 
-$publicPath = sprintf("%s://%s%s", $_SERVER['REQUEST_SCHEME'], $_SERVER['SERVER_NAME'], $_SERVER['SCRIPT_NAME']);
+$publicPath = sprintf("%s://%s%s%s", $_SERVER['REQUEST_SCHEME'], $_SERVER['SERVER_NAME'], isset($_SERVER['SERVER_PORT']) ? ':'.$_SERVER['SERVER_PORT'] : '', $_SERVER['SCRIPT_NAME']);
 $publicPath = str_replace('index.php', '', $publicPath);
 define('PUBLIC_PATH', $publicPath);
 
@@ -47,21 +57,28 @@ define('PUBLIC_PATH', $publicPath);
 require_once "../app/global.packages.php";
 
 // Defining PATH
-$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+$temp = '';
+if (isset($_SERVER['ORIG_PATH_INFO'])) {
+  $temp = $_SERVER['ORIG_PATH_INFO'];
+} else if (isset($_SERVER['PATH_INFO'])) {
+  $temp = $_SERVER['PATH_INFO'];
+}
+$path = $temp ? $temp : '/';
 $params = [];
 $routeNotValid = false;
 
 // @Session: searching params
 
 $route = null;
-if (isset($routes[$path])) $route = $routes[$path];
+$method = $_SERVER['REQUEST_METHOD'];
+if (isset($routes[$method][$path])) $route = $routes[$method][$path];
 
 $paramPath = explode('/', $path);
 unset($paramPath[0]);
 $paramPath = array_values($paramPath);
 
 if (!$route) {
-  foreach($routes as $index => $r) {
+  foreach($routes[$method] as $index => $r) {
 
     if ($route) {
       break;

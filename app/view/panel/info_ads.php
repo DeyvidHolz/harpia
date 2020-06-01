@@ -5,8 +5,8 @@
 
 <div class="container mt-3">
   <h2 class="text-center pointer"
-    onclick="$notificate({ backgroundColor: colors.color_dark, icon: 'information-variant', description: 'Meta tags da aplicação' })"
-  >Informações - SEO</h2>
+    onclick="$notificate({ backgroundColor: colors.color_dark, icon: 'information-variant', description: 'Scripts para anúncios e outros' })"
+  >Informações - Ads</h2>
   <hr>
 </div>
 
@@ -20,22 +20,15 @@
 
     <div class="col-12 col-md-6">
       <div class="md-form form-sm mt-5">
-        <input type="text" id="page_title" class="form-control">
-        <label for="page_title">Título das paginas</label>
+        <input type="text" id="script_google_ads" class="form-control">
+        <label for="script_google_ads">Script: Google Ads</label>
       </div>
     </div>
 
     <div class="col-12 col-md-6">
       <div class="md-form form-sm mt-5">
-        <input type="text" id="meta_description" class="form-control">
-        <label for="meta_description">Meta Description</label>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-12">
-      <div class="md-form form-sm mt-5">
-        <input type="text" id="meta_keywords" class="form-control">
-        <label for="meta_keywords">Meta Keywords</label>
+        <input type="text" id="script_facebook_pixel" class="form-control">
+        <label for="script_facebook_pixel">Script: Facebook Pixel</label>
       </div>
     </div>
 
@@ -50,9 +43,8 @@
   let data = <?= get('appContent') ?>
 
   document.addEventListener('DOMContentLoaded', function() {
-    setContent('page_title', data.page_title)
-    setContent('meta_description', data.meta_description)
-    setContent('meta_keywords', data.meta_keywords)
+    setContent('script_google_ads', data.script_google_ads)
+    setContent('script_facebook_pixel', data.meta_script_facebook_pixelkeywords)
   });
 
   function setContent(id, val) {

@@ -24,4 +24,9 @@ class AppContent extends Model
     return $parseJson ? json_encode($appContent) : $appContent;
   }
 
+  public static function getContent($ref) {
+    $content = self::whereOne(['ref', '=', $ref]);
+    return $content ? $content->content : '';
+  }
+
 }

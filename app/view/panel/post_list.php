@@ -7,14 +7,6 @@
   <h2 class="text-center">Lista de Postagens</h2>
   <hr>
 
-  <?php if (get('view.message') !== 'undefined') { ?>
-  <h4 class="text-success text-center mb-5"><?= get('view.message') ?></h4>
-  <?php unset($_SESSION['view.message']); } ?>
-
-  <?php if (get('view.message.error') !== 'undefined') { ?>
-  <h4 class="text-danger text-center mb-5"><?= get('view.message.error') ?></h4>
-  <?php unset($_SESSION['view.message.error']); } ?>
-
   <div class="row">
 
   <?php if (is_array(get('posts')) && count(get('posts'))) { ?>
@@ -25,9 +17,11 @@
         <div>
           <h5 class="text-center font-weight-bold"><?= $post->title ?></h5>
 
+          <?php if (!empty($post->images) && $post->images !== 'Array' && $post->images !== '[]') { ?>
           <div>
             <img class="adapt" src="<?= storage(@json_decode($post->images)[0]) ?>" alt="">
           </div>
+          <?php } ?>
         </div>
 
         <div class="footer">
@@ -72,6 +66,20 @@ document.addEventListener('DOMContentLoaded', function() {
   })
 })
 
+</script>
+
+<script>
+  <?php if (get('view.message') !== 'undefined') { ?>
+  document.addEventListener('DOMContentLoaded', function() {
+    $notificate({ icon: 'information-variant', backgroundColor: colors.color_success, description: '<?= get('view.message') ?>' })
+  })
+  <?php unset($_SESSION['view.message']); } ?>
+
+  <?php if (get('view.message.error') !== 'undefined') { ?>
+    document.addEventListener('DOMContentLoaded', function() {
+    $notificate({ icon: 'information-variant', backgroundColor: colors.color_danger, description: '<?= get('view.message.error') ?>' })
+  })
+  <?php unset($_SESSION['view.message.error']); } ?>
 </script>
 
 <?php Layout::use('panel.end') ?>

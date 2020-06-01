@@ -8,13 +8,7 @@
   <input type="hidden" id="removeImage" name="removeImage" value="">
 
   <div class="hp-container swift-box-shadow defined-lg">
-    <h2 class="text-center">Criar nova postagem</h2>
-
-    <?php if (get('view.message.error') !== 'undefined') { ?>
-    <div class="text-center">
-      <span class="text-danger"><?= get('view.message.error') ?></span>
-    </div>
-    <?php unset($_SESSION['view.message.error']); } ?>
+    <h2 class="text-center">Editar postagem</h2>
 
     <div class="row">
 
@@ -97,9 +91,8 @@
 </form>
 
 <script src="<?= asset('js/tinymce/tinymce.min.js') ?>"></script>
-<script src="<?= asset('js/tinymce/jquery.tinymce.min.js') ?>"></script>
 <script>
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function() {
   tinymce.init({
       selector: '#post-editor',
       theme: 'modern',
@@ -121,18 +114,18 @@ $(document).ready(function() {
   });
 });
 
-let autofill = true;
+let autofillContent = true;
 let slug = document.querySelector('#slug')
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#title').addEventListener('change', function () {
-    if (autofill) {
+    if (autofillContent) {
       slug.value = getSlug(this.value);
       document.querySelector('label[for="slug"]').classList.add('active');
     }
   });
 
   document.querySelector('#slug').addEventListener('focus', function () {
-    autofill = false;
+    autofillContent = false;
   });
 })
 
@@ -168,3 +161,4 @@ function toggleRemoveImage() {
 </script>
 
 <?php Layout::use('panel.end') ?>
+<script src="<?= asset('js/tinymce/jquery.tinymce.min.js') ?>"></script>

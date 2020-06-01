@@ -21,9 +21,3 @@ class MySQLResponse
   }
 
 }
-
-// 'query' => $query,
-// 'errorCode' => $stmt->errorInfo()[1],
-// 'error' => null,
-// 'fetch' => $stmt->fetchAll(),
-// 'executed' => true

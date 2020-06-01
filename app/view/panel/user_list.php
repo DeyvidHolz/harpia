@@ -7,14 +7,6 @@
   <h2 class="text-center">Lista de usuários</h2>
   <hr>
 
-  <?php if (get('view.message') !== 'undefined') { ?>
-  <h4 class="text-success text-center mb-5"><?= get('view.message') ?></h4>
-  <?php unset($_SESSION['view.message']); } ?>
-
-  <?php if (get('view.message.error') !== 'undefined') { ?>
-  <h4 class="text-danger text-center mb-5"><?= get('view.message.error') ?></h4>
-  <?php unset($_SESSION['view.message.error']); } ?>
-
   <div class="row">
 
   <?php foreach (get('users') as $user) { ?>

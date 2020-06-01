@@ -36,4 +36,11 @@ const VIEW_SERVICE_UNAVAILABLE = '503';
 // Define maintenance
 const IN_MAINTENANCE = false;
 // use for example: '/panel' to specify path or * to global
-const URL_MAINTENANCE = '/painel'; 
+const URL_MAINTENANCE = '/painel';
+
+// Email configurations (PHP Mailer)
+const EMAIL_LOGIN = '';
+const EMAIL_PASSWORD = '';
+
+/* HARPIA */
+const HARPIA_VERSION = '0.1.0';

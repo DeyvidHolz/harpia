@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
+  <?= appContent('script_google_ads') ?>
+  <?= appContent('script_facebook_pixel') ?>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= getPageTitle() ?></title>
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="<?= asset('../favicon.png') ?>" type="image/x-icon">
+  <link rel="shortcut icon" href="<?= storage(appContent('favicon')) ?>" type="image/x-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&display=swap" rel="stylesheet">
@@ -25,12 +29,7 @@
   
   <!-- MDBootstrap -->
   <link rel="stylesheet" href="<?= asset('css/mdb/mdb.min.css') ?>">
-
-  <!-- jQuery -->
-  <script type="text/javascript" src="<?= asset('js/jquery/jquery-3.4.1.min.js') ?>"></script>
-  <script type="text/javascript" src="<?= asset('js/jquery/jquery.mask.js') ?>"></script>
-
-  <!-- Harpia Components -->
-  <script type="text/javascript" src="<?= asset('js/harpia.components.js') ?>"></script>
 </head>
 <body>
+
+  <script src="<?= asset('js/harpia.init.js') ?>"></script>

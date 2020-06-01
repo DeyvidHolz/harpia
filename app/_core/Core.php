@@ -40,7 +40,7 @@ class Core
         $qs = explode('=', $_SERVER['QUERY_STRING']);
         foreach($qs as $index => $query) {
           if (!empty($query)) {
-            $tempQuery = preg_replace('/[^a-zA-Z0-9]/', '', $query);
+            $tempQuery = preg_replace('/[^a-zA-Z0-9_]/', '', $query);
             if ($index % 2 === 0) {
               $request->query->$tempQuery = isset($qs[$index+1]) ? $qs[$index+1] : null;
             }
@@ -51,7 +51,7 @@ class Core
       $request->body = new stdClass();
       if (!empty($_POST)) {
         foreach($_POST as $index => $value) {
-          $tempBody = preg_replace('/[^a-zA-Z0-9]/', '', $index);
+          $tempBody = preg_replace('/[^a-zA-Z0-9_]/', '', $index);
           $request->body->$tempBody = $value;
         }
       }
@@ -59,7 +59,7 @@ class Core
       $request->file = new stdClass();
       if (!empty($_FILES)) {
         foreach($_FILES as $index => $value) {
-          $tempFileIndex = preg_replace('/[^a-zA-Z0-9]/', '', $index);
+          $tempFileIndex = preg_replace('/[^a-zA-Z0-9_]/', '', $index);
           $request->file->$tempFileIndex = $value;
         }
       }

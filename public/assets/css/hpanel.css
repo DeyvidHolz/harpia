@@ -181,6 +181,40 @@ body {
   box-shadow: 0 7px 14px rgba(0,0,0,0.25), 0 5px 5px rgba(0,0,0,0.22);
 }
 
+.panel-version {
+  position: fixed;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 1000px;
+  color: rgba(255, 255, 255, .5);
+  font-size: .88rem;
+  user-select: none;
+}
+
+.gallery-defined {
+  background: #fafafa;
+  padding: .5rem;
+  border-radius: 3.5px;
+}
+
+.gallery-defined {
+  width: 100%;
+  height: 100%;
+}
+
+.gallery-defined img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.undefined {
+  width: fit-content !important;
+  height: fit-content !important;
+}
+
 @media (max-width: 766px) {
   .hp-container {
     width: 92vw;

@@ -50,6 +50,7 @@
               <ul class="list-unstyled">
                 <li><a href="<?= PUBLIC_PATH ?>painel/info" class="waves-effect"><span class="mdi mdi-view-dashboard-outline mr-2"></span> Informações gerais</a></li>
                 <li><a href="<?= PUBLIC_PATH ?>painel/info/seo" class="waves-effect"><span class="mdi mdi-google mr-2"></span> SEO</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/info/ads" class="waves-effect"><span class="mdi mdi-google-ads mr-2"></span> Ads</a></li>
               </ul>
             </div>
           </li>
@@ -82,12 +83,38 @@
 
           <li>
             <a class="collapsible-header waves-effect arrow-r">
+              <span class="mdi mdi-folder-multiple-image mr-2"></span> Galeria
+            </a>
+
+            <div class="collapsible-body">
+              <ul class="list-unstyled">
+                <li><a href="<?= PUBLIC_PATH ?>painel/galeria/add" class="waves-effect"><span class="mdi mdi-image-plus mr-2"></span> Adicionar imagem</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/galeria" class="waves-effect"><span class="mdi mdi-image-multiple mr-2"></span> Ver todos</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li>
+            <a class="collapsible-header waves-effect arrow-r">
+              <span class="mdi mdi-image-move mr-2"></span> Slides
+            </a>
+
+            <div class="collapsible-body">
+              <ul class="list-unstyled">
+                <li><a href="<?= PUBLIC_PATH ?>painel/#" class="waves-effect"><span class="mdi mdi-image-plus mr-2"></span> Criar novo slide</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/#" class="waves-effect"><span class="mdi mdi-folder-multiple-image mr-2"></span> Ver todos</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li>
+            <a class="collapsible-header waves-effect arrow-r">
               <span class="mdi mdi-cogs mr-2"></span> Configurações
             </a>
 
             <div class="collapsible-body">
               <ul class="list-unstyled">
-                <li><a href="<?= PUBLIC_PATH ?>painel/config/site" class="waves-effect"><span class="mdi mdi-cog mr-2"></span> Site</a></li>
+                <li><a href="<?= PUBLIC_PATH ?>painel/config/site" class="waves-effect"><span class="mdi mdi-cog mr-2"></span> Configurações do Site</a></li>
               </ul>
             </div>
           </li>
@@ -97,6 +124,7 @@
       
     </ul>
     <div class="sidenav-bg mask-strong"></div>
+    <div class="panel-version"><?= PANEL_VERSION ?></div>
   </div>
       
 
@@ -137,10 +165,10 @@
 </header>
 
 <script>
-$(document).ready(() => {
+document.addEventListener('DOMContentLoaded', function() {
   // SideNav Initialization
   $(".button-collapse").sideNav();
-	new WOW().init();
+  new WOW().init();
 })
 </script>
 

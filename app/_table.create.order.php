@@ -127,6 +127,9 @@ if (CREATE_DEFAULT_DATA) {
       'app_page_404_text' => 'Erro 404 | Página não encontrada.',
       'page_503_image' => '',
       'page_404_image' => '',
+      'favicon' => 'favicon.png',
+      'script_google_ads' => '',
+      'script_facebook_pixel' => '',
     ];
 
     foreach ($create as $ref => $content) {

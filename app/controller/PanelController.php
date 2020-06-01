@@ -30,8 +30,16 @@ class PanelController
     view('panel/info_seo', $data);
   }
 
-  public function configSite() {
+  public function infoAds() {
     $data = ['appContent' => AppContent::getReferenced(true)];
+    $data['page_title'] = 'Informações Gerais - Ads - Painel - {app_name}';
+    view('panel/info_ads', $data);
+  }
+
+  public function configSite() {
+    $data = [
+      'appContent' => AppContent::getReferenced(true),
+    ];
 
     $data['page_title'] = 'Configurações - Painel - {app_name}';
     view('panel/config_site', $data);
@@ -41,10 +49,12 @@ class PanelController
     $appContent = AppContent::whereOne(['ref', '=', $request->body->ref]);
 
     if (isset($request->file->imageFile)) {
-      $img = ImageHandler::save($request->file->imageFile);
-      $request->body->content = $img['fileName'];
-      $appContent->content = $request->body->content;
-      AppContent::save($appContent);
+      if (!empty($request->file->imageFile['name'])) {
+        $img = ImageHandler::save($request->file->imageFile);
+        $request->body->content = $img['fileName'];
+        $appContent->content = $request->body->content;
+        AppContent::save($appContent);
+      }
       return redirect('@/painel/config/site');
     }
     
@@ -85,7 +95,7 @@ class PanelController
         $user = User::save($user);
         if ($user) {
           $_SESSION['auth.registered'] = 'Registrado com sucesso!';
-          return redirect('@/painel/usuario/'.$user->id);
+          return redirect('@/painel/usuarios');
         } else {
           $_SESSION['auth.error'] = 'Ocorreu um erro com seu cadastro';
         }
@@ -222,8 +232,6 @@ class PanelController
   public function newPostAction($request) {
     Package::use('harpia/Validator');
 
-    $post = new Post($request->body);
-
     $toValidate = [
       [$request->body->title => 'required|length:6-256', 'title' => 'field'],
       [$request->body->content => 'minlength:6', 'content' => 'field'],
@@ -236,15 +244,18 @@ class PanelController
     
     if ($valid === true) {
 
+      $post = new Post($request->body);
+
       // Saving image
       $image = null;
-      if (!empty($request->file->image) && !empty($request->file->image['name'])) $image = ImageHandler::save($request->file->image);
+      if (!empty($request->file->image) && !empty($request->file->image['name'])) $image = ImageHandler::save($request->file->image, $post->slug);
       if ($image['status']) $post->images = [$image['fileName']];
 
       $post = Post::getFormatted($post);
       if (isset($_SESSION['id'])) $post->user_id = $_SESSION['id'];
 
       if (Post::save($post)) {
+        $_SESSION['view.message'] = 'Postagem criada com sucesso';
         return redirect('@/painel/post/lista');
       } else {
         $_SESSION['view.message.error'] = 'Ocorreu um erro ao salvar a postagem';
@@ -291,7 +302,7 @@ class PanelController
       // Saving image
       $image = null;
       if (!empty($request->file->image) && !empty($request->file->image['name'])) {
-        $image = ImageHandler::save($request->file->image);
+        $image = ImageHandler::save($request->file->image, $post->slug);
         if ($image['status']) $post->images = [$image['fileName']];
       } else {
         $currentImage = @json_decode($currentPost->images)[0];
@@ -306,6 +317,7 @@ class PanelController
       if (isset($_SESSION['id'])) $post->user_id = $_SESSION['id'];
 
       if (Post::save($post)) {
+        $_SESSION['view.message'] = 'Alterações salvas com sucesso';
         return redirect('@/painel/post/lista');
       } else {
         $_SESSION['view.message.error'] = 'Ocorreu um erro ao salvar a postagem';
@@ -336,6 +348,47 @@ class PanelController
     }
 
     redirect('@/painel/post/lista');
+  }
+
+  public function viewAllStorageImages() {
+    $s = DIRECTORY_SEPARATOR;
+    $path = __DIR__ . sprintf("%s..%s..%spublic%sstorage", $s, $s, $s, $s);
+    $ext = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff');
+    
+    $data = [
+      'page_title' => 'Galeria - Painel - {app_name}',
+      'images' => getFilesOnDirectory($path, $ext),
+    ];
+
+    view('panel/gallery', $data);
+  }
+
+  public function deleteFileFromStorage($request) {
+    $s = DIRECTORY_SEPARATOR;
+    $path = __DIR__ . sprintf("%s..%s..%spublic%sstorage", $s, $s, $s, $s);
+    $path .= $s . $request->body->filename;
+
+    if (isset($request->body->filename) && file_exists($path)) {
+      unlink($path);
+    }
+    
+    redirect('@/painel/galeria');
+  }
+
+  function viewAddImage() {
+    view('panel/add_image');
+  }
+
+  function addImageToStorage($request) {
+    $fullFileName = $request->body->imageName;
+    $request->body->imageName = preg_replace('/\.(.*?)$/', '', $request->body->imageName);
+
+    if (isset($request->body->imageName) && isset($request->file->imageFile)) {
+      if (file_exists("./storage/$fullFileName")) $request->body->imageName = '';
+      ImageHandler::save($request->file->imageFile, $request->body->imageName);
+    }
+
+    redirect('@/painel/galeria');
   }
 
   public static function checkAuth() {

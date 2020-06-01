@@ -31,7 +31,7 @@ class Post extends Model
     return $title;
   }
 
-  public static function save($modelClass, $primaryKey = 'id') {
+  public static function save($modelClass, $primaryKey = 'id', $get = null) {
     if (!empty($modelClass->categories)) $modelClass->categories = json_encode($modelClass->categories);
     if (!empty($modelClass->images)) $modelClass->images = json_encode($modelClass->images);
     $modelClass->slug = self::getSlug($modelClass->title);
@@ -40,7 +40,7 @@ class Post extends Model
     
     if ($posts && count($posts)) $modelClass->slug .= '-' . count($posts);
 
-    return parent::save($modelClass, $primaryKey);
+    return parent::save($modelClass, $primaryKey, $get);
   }
 
   public static function getFormatted (Post $post) {

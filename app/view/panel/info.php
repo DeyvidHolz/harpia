@@ -112,7 +112,7 @@
   });
 
   function setContent(id, val) {
-    document.getElementById(id).value = val.content;
+    document.getElementById(id).value = val && val.content ? val.content : '';
     document.getElementById(id).addEventListener('keyup', function() {
       saveContent(id, this.value)
     })

@@ -26,6 +26,16 @@ function get($index = null, $displayNulls = !PRODUCTION, $returnUndefinedToFalse
   }
 }
 
+function getOr($index, $alternative) {
+  $get = get($index);
+  return (!$get || $get === 'undefined') ? $alternative : $get;
+}
+
+function appContent($ref) {
+  Core::useModel('appContent');
+  return AppContent::getContent($ref);
+}
+
 function response($arr = 'null', $code = 200, $options = []) {
 
   if (!isset($options['Access-Control-Allow-Origin'])) $options['Access-Control-Allow-Origin'] = [APP_URL];
@@ -160,15 +170,15 @@ function parseJSON($var, $echo = true) {
 }
 
 function asset($path) {
-  return DIR_ASSETS.$path;
+  return str_replace('public//assets', 'public/assets', DIR_ASSETS.$path);
 }
 
 function assets($path) {
-  return DIR_ASSETS.$path;
+  return str_replace('public//assets', 'public/assets', DIR_ASSETS.$path);
 }
 
 function storage($path) {
-  return DIR_PUBLIC.'storage/'.$path;
+  return str_replace('public//storage', 'public/storage', DIR_PUBLIC.'storage/'.$path);
 }
 
 function redirect($route, $data = null) {
@@ -189,7 +199,7 @@ function debug($var, $ref = null) {
   echo '</pre>';
 }
 
-function getPageTitle() {
+function getPageTitle () {
   $pageTitle = get('page_title');
 
   if (empty($pageTitle) || $pageTitle === 'undefined') return APP_CONTENT_PAGE_TITLE ? APP_CONTENT_PAGE_TITLE : APP_NAME;
@@ -199,4 +209,19 @@ function getPageTitle() {
   } else {
     return str_replace('{app_name}', APP_NAME, $pageTitle);
   }
+}
+
+function getFilesOnDirectory ($path, $extensions) {
+  $result = array();
+  $directory = new DirectoryIterator($path);
+
+  foreach ($directory as $fileinfo) {
+      if ($fileinfo->isFile()) {
+          $extension = strtolower(pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION));
+          if (in_array($extension, $extensions)) {
+              $result[] = $fileinfo->getFilename();
+          }
+      }
+  }
+  return $result;
 }

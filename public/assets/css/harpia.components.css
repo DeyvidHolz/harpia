@@ -87,6 +87,8 @@
   font-size: .9rem;
   letter-spacing: .1px;
   z-index: 3005;
+  font-size: 1.6rem;
+  margin-right: .5rem;
 }
 
 .hc--notification:hover {
@@ -102,11 +104,6 @@
   border-radius: 4.5px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-}
-
-.hc--notification {
-  font-size: 1.6rem;
-  margin-right: .5rem;
 }
 
 .hc--dialog {
@@ -172,6 +169,149 @@
 
 .hc--dialog-animateOut {
   animation-name: kfDialogOut;
-  animation-duration: .74s;
+  animation-duration: .54s;
   animation-fill-mode: forwards;
+}
+
+.hc--window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 85vw;
+  height: 85vh;
+  z-index: 10000;
+  background: var(--hc-light);
+  box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, .45);
+  border-radius: 4px;
+  padding: 2.5rem;
+}
+
+.hc--window-center {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hc--window img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.hc--window-close-icon {
+  position: absolute;
+  top: 4px;
+  right: 6.5px;
+  color: var(--hc-danger);
+}
+
+.hc--window-animateIn {
+  animation-name: kfWindowIn;
+  animation-duration: .46s;
+  animation-fill-mode: forwards;
+}
+
+.hc--window-animateOut {
+  animation-name: kfWindowOut;
+  animation-duration: .54s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes kfWindowIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes kfWindowOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  90% {
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(0);
+  }
+}
+
+/* Loading */
+.hc--loading {
+  position: fixed;
+  bottom: 1rem;
+  right: 0;
+  width: 200px;
+  height: 49px;
+  z-index: 11001;
+  background: var(--hc-light);
+  box-shadow: 2px 2px 8px 1px rgba(0, 0, 0, .45);
+  border-radius: 4px;
+  padding: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* .hc--loading img {
+  max-width: 100%;
+  max-height: 100%;
+} */
+
+.hc--loading-animateIn {
+  animation-name: kfLoadingIn;
+  animation-duration: .46s;
+  animation-fill-mode: forwards;
+}
+
+.hc--loading-animateOut {
+  animation-name: kfLoadingOut;
+  animation-duration: .54s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes kfLoadingIn {
+  from {
+    right: -50vw;
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  to {
+    right: 0;
+  }
+}
+
+@keyframes kfLoadingOut {
+  from {
+    right: 0;
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0;
+  }
+
+  to {
+    right: -10vw;
+  }
 }

@@ -10,11 +10,11 @@ class PermissionGroup extends Model
   public static $table = 'permissions_group';
   public static $fillable = ['id', 'name', 'permissions'];
 
-  public static function save($modelClass, $primaryKey = 'id') {
+  public static function save($modelClass, $primaryKey = 'id', $get = null) {
     if ($modelClass->permissions !== '*' && is_array($modelClass->permissions)) {
       $modelClass->permissions = json_encode($modelClass->permissions);
     }
-    return parent::save($modelClass, $primaryKey);
+    return parent::save($modelClass, $primaryKey, $get);
   }
 
   public function create() {

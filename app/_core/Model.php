@@ -12,8 +12,10 @@ abstract class Model
 
   }
 
-  public static function find($id, $idColumnReference = 'id')
+  public static function find($id, $idColumnReference = 'id', $get = null)
   {
+
+    if ($idColumnReference === '@') $idColumnReference = 'id';
 
     // Preparing function variables
     if (!is_array($id)) $id = [$id];
@@ -42,6 +44,8 @@ abstract class Model
       $stmt->bindValue(($i+1), $v);
     }
 
+    if ($get) return $query;
+
     if ($stmt->execute()) {
       if ($stmt->rowCount() > 0) {
         $models = [];
@@ -60,7 +64,9 @@ abstract class Model
   }
 
 
-  public static function findOne($id, $idColumnReference = 'id') {
+  public static function findOne($id, $idColumnReference = 'id', $get = null) 
+  {
+    if ($idColumnReference === '@') $idColumnReference = 'id';
     $table = static::$table;
     
     $fillable = join(',', static::$fillable);
@@ -71,6 +77,8 @@ abstract class Model
     $stmt = getConnection()->prepare($query);
     $stmt->bindValue(":$idColumnReference", $id);
     
+    if ($get) return $query;
+
     if ($stmt->execute()) {
       if ($stmt->rowCount()) return new static($stmt->fetch(PDO::FETCH_OBJ));
     } else {
@@ -81,9 +89,10 @@ abstract class Model
   }
 
 
-  public static function where(Array $arr, $fetchOne = false)
+  public static function where(Array $arr, $fetchOne = false, $get = null)
   {
-    
+    if ($fetchOne === '@') $fetchOne = false;
+
     if (count($arr)) {
       if (!is_array($arr[0])) $arr = [[$arr[0], $arr[1], $arr[2]]];
 
@@ -125,6 +134,8 @@ abstract class Model
       $stmt->bindValue($i, $value);
     }
 
+    if ($get) return $query;
+
     if ($stmt->execute()) {
       if ($stmt->rowCount() > 0) {
         $models = [];
@@ -149,15 +160,16 @@ abstract class Model
   }
 
 
-  public static function whereOne(Array $arr) {
-    $result = self::where($arr, 1); // 1 = fetch one
+  public static function whereOne(Array $arr, $get = null) {
+    $result = self::where($arr, 1, $get); // 1 = fetch one
     return $result;
   }
 
 
-  public static function save($modelClass, $primaryKey = 'id')
+  public static function save($modelClass, $primaryKey = 'id', $get = null)
   {
-    
+    if ($primaryKey === '@') $primaryKey = 'id';
+
     $table = static::$table;
 
     $fillable = [];
@@ -214,6 +226,8 @@ abstract class Model
       $stmt->bindValue(":$bind", $modelClass->$bind);
     }
 
+    if ($get) return $query;
+
     if ($stmt->execute()) {
       if ($stmt->rowCount()) {
         return empty($modelClass->id) ? self::getLastRecord($primaryKey) : self::findOne($modelClass->id, $primaryKey);
@@ -228,15 +242,17 @@ abstract class Model
   }
 
 
-  public static function delete($id, $idColumnReference = 'id')
+  public static function delete($id, $idColumnReference = 'id', $get = null)
   {
-
+    if ($idColumnReference === '@') $idColumnReference = 'id';
     $table = static::$table;
 
     $query = "DELETE FROM $table WHERE $idColumnReference = :$idColumnReference";
     $stmt = getConnection()->prepare($query);
     $stmt->bindValue(":$idColumnReference", $id);
     
+    if ($get) return $query;
+
     if ($stmt->execute()) {
       if ($stmt->rowCount()) return true;
     } else {
@@ -248,7 +264,7 @@ abstract class Model
   }
 
 
-  public static function deleteWhere($where, $operator = null, $value = null)
+  public static function deleteWhere($where, $operator = null, $value = null, $get = null)
   {
 
     if (!is_array($where)) $where = [[$where, $operator, $value]];
@@ -274,6 +290,8 @@ abstract class Model
       $stmt->bindValue(":$bind", $val);
     }
 
+    if ($get) return $query;
+
     if ($stmt->execute()) {
       if ($stmt->rowCount()) return true;
     } else {
@@ -282,8 +300,9 @@ abstract class Model
     return false;
   }
 
-  public static function getAll($parseObjectToJSON = false)
+  public static function getAll($parseObjectToJSON = false, $get = null)
   {
+    if ($parseObjectToJSON === '@') $parseObjectToJSON = false;
 
     $table = static::$table;
     
@@ -293,6 +312,8 @@ abstract class Model
 
     $query = "SELECT $fillable FROM $table";
     $stmt = getConnection()->prepare($query);
+
+    if ($get) return $query;
 
     if ($stmt->execute()) {
       if ($stmt->rowCount()) {
@@ -318,7 +339,10 @@ abstract class Model
   }
 
 
-  public static function getLastRecord($primaryKey = 'id') {
+  public static function getLastRecord($primaryKey = 'id', $get = null) 
+  {
+    if ($primaryKey === '@') $primaryKey = 'id';
+
     $table = static::$table;
     $fillable = static::$fillable;
 
@@ -328,6 +352,8 @@ abstract class Model
     
     $query = "SELECT $fillable FROM $table WHERE 1 ORDER BY $primaryKey DESC LIMIT 1";
     $stmt = getConnection()->prepare($query);
+
+    if ($get) return $query;
 
     if ($stmt->execute()) {
       if ($stmt->rowCount()) {
@@ -390,7 +416,7 @@ abstract class Model
     return $users;
   }
 
-  public static function join(Array $joins) 
+  public static function join(Array $joins, $get = null) 
   {
 
     $query = null;
@@ -448,9 +474,6 @@ abstract class Model
           $preparedJoinArr[$table]['joinFillable'] .= sprintf("`%s`.`%s`,", $table, $joinFillable);
         }
       }
-
-      // $preparedJoinArr[$table]['modelFillable'] = preg_replace('/,$/', '', $preparedJoinArr[$table]['modelFillable']);
-      // $preparedJoinArr[$table]['joinFillable'] = preg_replace('/,$/', '', $preparedJoinArr[$table]['joinFillable']);
     }
 
     $joinType = isset(static::$joinType) ? static::$joinType . ' JOIN' : 'LEFT JOIN';
@@ -493,13 +516,15 @@ abstract class Model
     }
 
     $query = "SELECT $fillable FROM `" . static::$table . "` $joins $where";
-    $query = str_replace(', FROM', 'FROM', $query);
+    $query = str_replace(', FROM', ' FROM', $query);
     $query = str_replace(',,', ',', $query);
     $stmt = getConnection()->prepare($query);
 
     foreach ($toBind as $bind) {
       $stmt->bindValue($bind['bind'], $bind['value']);
     }
+
+    if ($get) return $query;
 
     if ($stmt->execute()) {
       if ($stmt->rowCount()) {
