@@ -6,4 +6,4 @@ Biblioteca PHP com estrutura MVC
 - CRUD (find, findOne, where, whereOne, save, delete, deleteWhere)
 - Rotas
 
-Documentação: em breve
+PS: projeto descontinuado.
